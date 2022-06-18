@@ -18,7 +18,7 @@ Obstacles:
 
 ---
 
-Bonus:
+Bonus ideas:
 
 - climber can also move down or climb up faster for a while
 - birds coming from the side
