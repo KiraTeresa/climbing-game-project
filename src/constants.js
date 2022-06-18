@@ -1,2 +1,2 @@
 const CANVAS_WIDTH = 500;
-const CANVAS_HEIGHT = 700;
+const CANVAS_HEIGHT = 750;
