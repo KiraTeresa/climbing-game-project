@@ -1,6 +1,7 @@
 class Game {
   constructor() {
     this.background = new Background();
+    this.player = new Player();
   }
 
   preload() {
@@ -8,6 +9,7 @@ class Game {
   }
 
   play() {
-    this.background.drawBackground();
+    this.player.drawPlayer();
+    // this.background.drawBackground();
   }
 }
