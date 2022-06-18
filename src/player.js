@@ -4,6 +4,7 @@ class Player {
     this.left = CANVAS_WIDTH / 2 - 70;
     this.height = 180;
     this.width = 120;
+    this.timesHit = 0;
   }
 
   preload() {
