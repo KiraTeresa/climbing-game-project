@@ -1,15 +1,26 @@
 class Player {
   constructor() {
-    this.top = CANVAS_HEIGHT / 2;
-    this.left = CANVAS_WIDTH / 2;
-    this.height = 70;
-    this.width = 50;
+    this.top = CANVAS_HEIGHT / 2 - 100;
+    this.left = CANVAS_WIDTH / 2 - 70;
+    this.height = 180;
+    this.width = 120;
+  }
+
+  preload() {
+    this.img = loadImage(
+      "./assets/vecteezy_indoor-rock-climbing-gym_7095122.png"
+    );
   }
 
   drawPlayer() {
-    push();
-    fill("orange");
-    rect(this.left, this.top, this.width, this.height);
-    pop();
+    image(this.img, this.left, this.top, this.width, this.height);
+  }
+
+  keyPressed() {
+    if (keyCode === LEFT_ARROW) {
+      this.left -= 10;
+    } else if (keyCode === RIGHT_ARROW) {
+      this.left += 10;
+    }
   }
 }

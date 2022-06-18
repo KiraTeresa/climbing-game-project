@@ -1,2 +1,5 @@
-const CANVAS_WIDTH = 500;
-const CANVAS_HEIGHT = 750;
+const CANVAS_WIDTH = 600;
+const CANVAS_HEIGHT = 800;
+
+const LEFT_ARROW = 37;
+const RIGHT_ARROW = 39;

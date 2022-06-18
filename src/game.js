@@ -6,10 +6,15 @@ class Game {
 
   preload() {
     this.background.preload();
+    this.player.preload();
   }
 
   play() {
+    this.background.drawBackground();
     this.player.drawPlayer();
-    // this.background.drawBackground();
+  }
+
+  keyPressed() {
+    this.player.keyPressed();
   }
 }

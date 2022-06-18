@@ -12,3 +12,7 @@ function preload() {
 function draw() {
   game.play();
 }
+
+function keyPressed() {
+  game.keyPressed();
+}
