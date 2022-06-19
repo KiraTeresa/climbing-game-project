@@ -5,6 +5,7 @@ class Player {
     this.height = 180;
     this.width = 120;
     this.timesHit = 0;
+    this.energy = ENERGY;
   }
 
   preload() {
@@ -19,9 +20,9 @@ class Player {
 
   keyPressed() {
     if (keyCode === LEFT_ARROW) {
-      this.left -= 10;
+      this.left -= 20;
     } else if (keyCode === RIGHT_ARROW) {
-      this.left += 10;
+      this.left += 20;
     }
   }
 }
