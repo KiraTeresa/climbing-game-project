@@ -96,7 +96,8 @@ class Game {
     // set text with current energy level:
     if (this.player.energy > 0) {
       textSize(16);
-      text(`Energy: ${this.player.energy}`, 10, 25);
+      textAlign(CENTER, CENTER);
+      text(`Energy: ${this.player.energy}`, 55, 22);
     } else {
       push();
       textSize(15);
