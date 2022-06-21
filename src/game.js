@@ -3,6 +3,7 @@ class Game {
     this.background = new Background();
     this.player = new Player();
     this.rocks = [];
+    this.safetyEquipment = [];
   }
 
   preload() {
@@ -14,13 +15,15 @@ class Game {
     this.background.drawBackground();
     this.player.drawPlayer();
 
-    // Rocks randomly falling from mountain top:
+    // Rocks and safety equipment randomly falling from mountain top:
     if (this.player.energy > 0) {
       this.rocksFalling();
+      this.safetyEquipmentFalling();
     }
 
-    // Display energy level of climber:
-    this.energyLevel();
+    // Display energy and safety level of climber:
+    this.displayEnergyLevel();
+    this.displaySafetyLevel();
   }
 
   keyPressed() {
@@ -52,24 +55,23 @@ class Game {
   }
 
   rocksFalling() {
-    // Draw a rock every second:
+    // Create a rock every second:
     if (frameCount % 60 === 0) {
       this.rocks.push(new Rock());
       console.log(this.rocks);
     }
 
+    // Draw rocks:
     this.rocks.forEach((rock) => {
       //   rock.preload();
       rock.drawRock();
 
       // Remove rock from array when no longer within canvas:
       if (rock.top >= CANVAS_HEIGHT) {
-        this.rocks.splice(this.rocks.indexOf(rock), 1);
+        this.removeFromArr(this.rocks, rock);
       }
-    });
 
-    // Check if climber got hit by a rock:
-    this.rocks.forEach((rock) => {
+      // Check if climber got hit by a rock:
       if (this.isColliding(this.player, rock) && !rock.hitClimber) {
         this.player.timesHit++;
         this.player.energy -= 5;
@@ -79,7 +81,30 @@ class Game {
     console.log(this.player.timesHit);
   }
 
-  energyLevel() {
+  safetyEquipmentFalling() {
+    // Create new safety equipment every three seconds:
+    if (frameCount % 180 === 0) {
+      this.safetyEquipment.push(new SafetyEquipment());
+      console.log(this.safetyEquipment);
+    }
+
+    // Draw safety equipment, remove from array when no longer within canvas OR collected by player:
+    this.safetyEquipment.forEach((item) => {
+      item.drawSafetyEquipment();
+
+      if (this.isColliding(this.player, item)) {
+        this.player.safety++;
+        this.removeFromArr(this.safetyEquipment, item);
+      }
+
+      if (this.safetyEquipment.top >= CANVAS_HEIGHT) {
+        // this.safetyEquipment.splice(this.safetyEquipment.indexOf(item), 1);
+        this.removeFromArr(this.safetyEquipment, item);
+      }
+    });
+  }
+
+  displayEnergyLevel() {
     // create ellipse:
     rect(5, 5, 100, 30, 20, 20, 20, 20);
     push();
@@ -106,6 +131,20 @@ class Game {
       pop();
       this.gameOver();
     }
+  }
+
+  displaySafetyLevel() {
+    // create rect:
+    rect(CANVAS_WIDTH - 105, 5, 100, 30, 20, 20, 20, 20);
+
+    // set text with current safety level:
+    textSize(16);
+    textAlign(CENTER, CENTER);
+    text(`Safety: ${this.player.safety}`, CANVAS_WIDTH - 55, 22);
+  }
+
+  removeFromArr(arr, obstacle) {
+    arr.splice(arr.indexOf(obstacle), 1);
   }
 
   gameOver() {
