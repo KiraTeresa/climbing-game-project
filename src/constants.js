@@ -10,3 +10,6 @@ const ENERGY_RECT_WIDTH = 20;
 const ENERGY = 100;
 
 let rockImg;
+let quickDrawImg;
+
+const GRAVITY = 0.1;

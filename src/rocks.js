@@ -6,7 +6,6 @@ class Rock {
     this.left = random(20, CANVAS_WIDTH - 20);
     this.roundness = 50;
     this.speed = random(2, 5);
-    this.gravity = 0.2;
     this.hitClimber = false;
     this.img = img;
   }
@@ -14,6 +13,15 @@ class Rock {
   drawRock() {
     image(this.img, this.left, this.top, this.width, this.height);
     this.top += this.speed;
+    this.speed += GRAVITY;
+
+    // make rock rotate:
+    // push();
+    // translate(this.width / 2, this.height / 2);
+    // rotate(45);
+    // rotate(45);
+    // image(this.img, this.left, this.top, this.width, this.height);
+    // pop();
 
     // push();
     // fill("black");

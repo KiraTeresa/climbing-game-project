@@ -10,6 +10,7 @@ class Game {
     this.background.preload();
     this.player.preload();
     rockImg = loadImage("./assets/a44g_3gj6_201006.jpg");
+    quickDrawImg = loadImage("./assets/quick-draw_415193651_adobe-stock.jpg");
   }
 
   play() {
@@ -84,7 +85,7 @@ class Game {
   safetyEquipmentFalling() {
     // Create new safety equipment every three seconds:
     if (frameCount % 180 === 0) {
-      this.safetyEquipment.push(new SafetyEquipment());
+      this.safetyEquipment.push(new SafetyEquipment(quickDrawImg));
       console.log(this.safetyEquipment);
     }
 
