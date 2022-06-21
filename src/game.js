@@ -9,6 +9,7 @@ class Game {
   preload() {
     this.background.preload();
     this.player.preload();
+    rockImg = loadImage("./assets/a44g_3gj6_201006.jpg");
   }
 
   play() {
@@ -57,13 +58,12 @@ class Game {
   rocksFalling() {
     // Create a rock every second:
     if (frameCount % 60 === 0) {
-      this.rocks.push(new Rock());
+      this.rocks.push(new Rock(rockImg));
       console.log(this.rocks);
     }
 
     // Draw rocks:
     this.rocks.forEach((rock) => {
-      //   rock.preload();
       rock.drawRock();
 
       // Remove rock from array when no longer within canvas:

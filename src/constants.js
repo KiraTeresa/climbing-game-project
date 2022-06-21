@@ -8,3 +8,5 @@ const ENTER = 13;
 const ENERGY_RECT_WIDTH = 20;
 
 const ENERGY = 100;
+
+let rockImg;

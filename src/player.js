@@ -5,7 +5,7 @@ class Player {
     this.height = 180;
     this.width = 120;
     this.timesHit = 0;
-    this.safety = 0;
+    this.safety = 8;
     this.energy = ENERGY;
   }
 

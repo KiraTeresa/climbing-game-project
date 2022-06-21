@@ -1,26 +1,24 @@
 class Rock {
-  constructor() {
+  constructor(img) {
     this.height = random(10, 20);
     this.width = this.height;
     this.top = -this.height;
     this.left = random(20, CANVAS_WIDTH - 20);
     this.roundness = 50;
     this.speed = random(2, 5);
+    this.gravity = 0.2;
     this.hitClimber = false;
-  }
-
-  preload() {
-    this.img = loadImage("./assets/a44g_3gj6_201006.jpg");
+    this.img = img;
   }
 
   drawRock() {
-    // image(this.img, this.left, this.top, this.width, this.height);
-    // image(this.img, CANVAS_WIDTH / 2, 50, 50, 50);
-
-    push();
-    fill("black");
-    rect(this.left, this.top, this.width, this.height, this.roundness);
+    image(this.img, this.left, this.top, this.width, this.height);
     this.top += this.speed;
-    pop();
+
+    // push();
+    // fill("black");
+    // rect(this.left, this.top, this.width, this.height, this.roundness);
+    // this.top += this.speed;
+    // pop();
   }
 }
