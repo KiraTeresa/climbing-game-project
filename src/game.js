@@ -16,7 +16,7 @@ class Game {
     this.player.drawPlayer();
 
     // Rocks and safety equipment randomly falling from mountain top:
-    if (this.player.energy > 0) {
+    if (this.player.energy > 0 && this.player.safety < 10) {
       this.rocksFalling();
       this.safetyEquipmentFalling();
     }
@@ -106,15 +106,15 @@ class Game {
 
   displayEnergyLevel() {
     // create ellipse:
-    rect(5, 5, 100, 30, 20, 20, 20, 20);
     push();
-    if (this.player.energy > 25) {
-      fill("SeaGreen");
-    } else {
-      fill("#C30E0E");
-    }
+    fill("#C30E0E");
+    rect(5, 5, 100, 30, 20, 20, 20, 20);
+    pop();
+
     // let radius = this.player.energy * 0.2;
     let radius = 20;
+    push();
+    fill("SeaGreen");
     rect(5, 5, this.player.energy, 30, radius, radius, radius, radius); // rect(x, y, w, h, top-left radius, tr radius, br radius, bl radius)
     pop();
 
@@ -141,6 +141,10 @@ class Game {
     textSize(16);
     textAlign(CENTER, CENTER);
     text(`Safety: ${this.player.safety}`, CANVAS_WIDTH - 55, 22);
+
+    if (this.player.safety === 10) {
+      this.victory();
+    }
   }
 
   removeFromArr(arr, obstacle) {
@@ -180,10 +184,50 @@ class Game {
       CANVAS_WIDTH / 2,
       CANVAS_HEIGHT / 2 + 100
     );
+    pop();
+  }
+
+  victory() {
+    this.background.moving = false;
+
+    // show victory screen:
+    push();
+    fill(169, 169, 169);
+    rect(0, (CANVAS_HEIGHT / 3) * 2, CANVAS_WIDTH, CANVAS_HEIGHT / 2 - 30);
+    pop();
+
+    // show victory message:
+    push();
+    textSize(60);
+    textAlign(CENTER, CENTER);
+    text("Great Job!", CANVAS_WIDTH / 2, (CANVAS_HEIGHT / 3) * 2.5 - 30);
+    pop();
+
+    push();
+    textSize(20);
+    textAlign(CENTER, CENTER);
+    text(
+      "Did it even challenge you in any way?",
+      CANVAS_WIDTH / 2,
+      (CANVAS_HEIGHT / 3) * 2.5 + 30
+    );
+    pop();
+
+    // text to continue climbing:
+    push();
+    textSize(14);
+    textAlign(CENTER, BOTTOM);
+    text(
+      "Press Enter to climb the next mountain",
+      CANVAS_WIDTH / 2,
+      (CANVAS_HEIGHT / 3) * 2.5 + 100
+    );
+    pop();
   }
 
   restartGame() {
     this.player.energy = ENERGY;
+    this.player.safety = 0;
     this.background.moving = true;
   }
 }
