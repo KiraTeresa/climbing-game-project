@@ -11,5 +11,7 @@ const ENERGY = 100;
 
 let rockImg;
 let quickDrawImg;
+// let playerImg;
+// let playerTransparentImg;
 
 const GRAVITY = 0.1;

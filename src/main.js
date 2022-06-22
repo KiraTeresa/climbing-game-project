@@ -1,7 +1,8 @@
 const game = new Game();
 
 function setup() {
-  createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+  const canvas = createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+  canvas.parent("canvas");
   // background("SeaGreen");
 }
 

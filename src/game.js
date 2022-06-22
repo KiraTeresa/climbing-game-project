@@ -11,6 +11,12 @@ class Game {
     this.player.preload();
     rockImg = loadImage("./assets/a44g_3gj6_201006.jpg");
     quickDrawImg = loadImage("./assets/quick-draw_415193651_adobe-stock.jpg");
+    //
+    // -- trying to load transparent and non-transparent version of player img and pass it as an argument to drawPlayer() --
+    // playerImg = loadImage(
+    //   "./assets/vecteezy_indoor-rock-climbing-gym_7095122.png"
+    // );
+    // playerTransparentImg = loadImage("/assets/climber-transparent.png");
   }
 
   play() {
@@ -77,7 +83,14 @@ class Game {
         this.player.timesHit++;
         this.player.energy -= 5;
         rock.hitClimber = true;
+
+        // // -- trying to make climber img flicker: --
+        // this.player.gotHit();
       }
+      // make climber img stop flickering:
+      // if (!this.isColliding(this.player, rock) && rock.hitClimber) {
+      //   this.player.stopFlicker();
+      // }
     });
     console.log(this.player.timesHit);
   }

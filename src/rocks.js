@@ -5,7 +5,7 @@ class Rock {
     this.top = -this.height;
     this.left = random(20, CANVAS_WIDTH - 20);
     this.roundness = 50;
-    this.speed = random(2, 5);
+    this.speed = random(2, 4);
     this.hitClimber = false;
     this.img = img;
   }

@@ -4,7 +4,7 @@ class SafetyEquipment {
     this.width = 20;
     this.top = -this.height;
     this.left = random(20, CANVAS_WIDTH - 20);
-    this.speed = 3;
+    this.speed = 2;
     this.img = img;
   }
 
