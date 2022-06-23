@@ -9,14 +9,8 @@ class Game {
   preload() {
     this.background.preload();
     this.player.preload();
-    rockImg = loadImage("./assets/a44g_3gj6_201006.jpg");
-    quickDrawImg = loadImage("./assets/quick-draw_415193651_adobe-stock.jpg");
-    //
-    // -- trying to load transparent and non-transparent version of player img and pass it as an argument to drawPlayer() --
-    // playerImg = loadImage(
-    //   "./assets/vecteezy_indoor-rock-climbing-gym_7095122.png"
-    // );
-    // playerTransparentImg = loadImage("/assets/climber-transparent.png");
+    rockImg = loadImage("./assets/a44g_3gj6_201006.png");
+    quickDrawImg = loadImage("./assets/quick-draw_415193651_adobe-stock.png");
   }
 
   play() {
@@ -32,6 +26,9 @@ class Game {
     // Display energy and safety level of climber:
     this.displayEnergyLevel();
     this.displaySafetyLevel();
+
+    // Implement method to make climber img flicker when hit by rock:
+    this.player.flicker();
   }
 
   keyPressed() {
@@ -66,7 +63,6 @@ class Game {
     // Create a rock every second:
     if (frameCount % 60 === 0) {
       this.rocks.push(new Rock(rockImg));
-      console.log(this.rocks);
     }
 
     // Draw rocks:
@@ -83,23 +79,26 @@ class Game {
         this.player.timesHit++;
         this.player.energy -= 5;
         rock.hitClimber = true;
-
-        // // -- trying to make climber img flicker: --
-        // this.player.gotHit();
+        this.player.gotHit = true;
+        this.player.flickering = true;
+        this.player.frameCountAtHit = frameCount;
+        this.player.flicker();
+        console.log(this.player.timesHit);
       }
+      // else {
+      //   this.player.flickering = false;
+      // }
       // make climber img stop flickering:
       // if (!this.isColliding(this.player, rock) && rock.hitClimber) {
       //   this.player.stopFlicker();
       // }
     });
-    console.log(this.player.timesHit);
   }
 
   safetyEquipmentFalling() {
     // Create new safety equipment every three seconds:
     if (frameCount % 180 === 0) {
       this.safetyEquipment.push(new SafetyEquipment(quickDrawImg));
-      console.log(this.safetyEquipment);
     }
 
     // Draw safety equipment, remove from array when no longer within canvas OR collected by player:
@@ -119,12 +118,13 @@ class Game {
   }
 
   displayEnergyLevel() {
-    // create ellipse:
+    // create red ellipse:
     push();
     fill("#C30E0E");
     rect(5, 5, 100, 30, 20, 20, 20, 20);
     pop();
 
+    // create green ellipse:
     // let radius = this.player.energy * 0.2;
     let radius = 20;
     push();
@@ -137,7 +137,9 @@ class Game {
       textSize(16);
       textAlign(CENTER, CENTER);
       text(`Energy: ${this.player.energy}`, 55, 22);
-    } else {
+    }
+    // show game over screen when no more energy left:
+    else {
       push();
       textSize(15);
       textAlign(CENTER, CENTER);
@@ -156,6 +158,7 @@ class Game {
     textAlign(CENTER, CENTER);
     text(`Safety: ${this.player.safety}`, CANVAS_WIDTH - 55, 22);
 
+    // show victory screen when player collected enough safety equipment:
     if (this.player.safety === 10) {
       this.victory();
     }
@@ -167,6 +170,8 @@ class Game {
 
   gameOver() {
     this.background.moving = false;
+    this.player.flickering = false;
+
     push();
     fill(169, 169, 169);
     rect(0, CANVAS_HEIGHT / 3, CANVAS_WIDTH, CANVAS_HEIGHT / 3);

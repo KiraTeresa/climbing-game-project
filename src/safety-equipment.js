@@ -1,7 +1,7 @@
 class SafetyEquipment {
   constructor(img) {
-    this.height = 40;
-    this.width = 20;
+    this.height = 60;
+    this.width = 30;
     this.top = -this.height;
     this.left = random(20, CANVAS_WIDTH - 20);
     this.speed = 2;
