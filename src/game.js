@@ -4,6 +4,8 @@ class Game {
     this.player = new Player();
     this.rocks = [];
     this.safetyEquipment = [];
+    this.platforms = [];
+    this.platformPositionLeft = true;
   }
 
   preload() {
@@ -11,16 +13,20 @@ class Game {
     this.player.preload();
     rockImg = loadImage("./assets/a44g_3gj6_201006.png");
     quickDrawImg = loadImage("./assets/quick-draw_415193651_adobe-stock.png");
+    platformImg = loadImage("./assets/Pad_3_3.png");
+    // helmetImg = loadImage("./assets/helmet_vectorstock_22265240.png");
   }
 
   play() {
     this.background.drawBackground();
     this.player.drawPlayer();
 
-    // Rocks and safety equipment randomly falling from mountain top:
     if (this.player.energy > 0 && this.player.safety < 10) {
+      // Rocks and safety equipment randomly falling from mountain top:
       this.rocksFalling();
       this.safetyEquipmentFalling();
+      // Platforms appear every now and then:
+      this.platformAppearing();
     }
 
     // Display energy and safety level of climber:
@@ -104,6 +110,24 @@ class Game {
       if (this.safetyEquipment.top >= CANVAS_HEIGHT) {
         // this.safetyEquipment.splice(this.safetyEquipment.indexOf(item), 1);
         this.removeFromArr(this.safetyEquipment, item);
+      }
+    });
+  }
+
+  platformAppearing() {
+    // Create new platform every 6 seconds
+    if (frameCount % 300 === 0) {
+      this.platforms.push(new Platform(platformImg, this.platformPositionLeft));
+      this.platformPositionLeft = !this.platformPositionLeft;
+    }
+
+    this.platforms.forEach((platform) => {
+      // draw every element of the platform array
+      platform.drawPlatform();
+
+      // remove all platform elements which have left the canvas
+      if (platform.top > CANVAS_HEIGHT) {
+        this.removeFromArr(this.platforms, platform);
       }
     });
   }

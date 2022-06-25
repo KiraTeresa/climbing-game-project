@@ -27,7 +27,7 @@ class Player {
 
   semiTransparentDrawing() {
     push();
-    tint(255, 128); // test to see if setting transparency works
+    tint(255, 128);
     this.drawImage();
     pop();
   }
@@ -38,9 +38,9 @@ class Player {
     );
   }
 
-  get right() {
-    return this.left + this.width;
-  }
+  // get right() {
+  //   return this.left + this.width;
+  // }
 
   isTimeToGoBackToNormal() {
     // if this.shotTime === 0
