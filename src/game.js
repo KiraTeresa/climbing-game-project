@@ -6,6 +6,7 @@ class Game {
     this.safetyEquipment = [];
     this.platforms = [];
     this.platformPositionLeft = true;
+    // this.helmet = new Helmet();
   }
 
   preload() {
@@ -14,12 +15,13 @@ class Game {
     rockImg = loadImage("./assets/a44g_3gj6_201006.png");
     quickDrawImg = loadImage("./assets/quick-draw_415193651_adobe-stock.png");
     platformImg = loadImage("./assets/Pad_3_3.png");
-    // helmetImg = loadImage("./assets/helmet_vectorstock_22265240.png");
+    helmetImg = loadImage("./assets/helmet_vectorstock_22265240.png");
   }
 
   play() {
     this.background.drawBackground();
     this.player.drawPlayer();
+    // this.helmet.drawHelmet();
 
     if (this.player.energy > 0 && this.player.safety < 10) {
       // Rocks and safety equipment randomly falling from mountain top:
@@ -117,8 +119,12 @@ class Game {
   platformAppearing() {
     // Create new platform every 6 seconds
     if (frameCount % 300 === 0) {
-      this.platforms.push(new Platform(platformImg, this.platformPositionLeft));
+      this.platforms.push(
+        new Platform(platformImg, helmetImg, this.platformPositionLeft)
+      );
       this.platformPositionLeft = !this.platformPositionLeft;
+      platformCount++;
+      console.log("PlatformCount: ", platformCount);
     }
 
     this.platforms.forEach((platform) => {

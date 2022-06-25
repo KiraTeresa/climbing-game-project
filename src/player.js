@@ -13,6 +13,7 @@ class Player {
     this.shotTime = 0;
     this.isTransparent = false;
     this.canGetHit = true;
+    this.wearingHelmet = false;
   }
 
   boomChakalaka() {

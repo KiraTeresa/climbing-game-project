@@ -15,3 +15,5 @@ let platformImg;
 let helmetImg;
 
 const GRAVITY = 0.1;
+
+let platformCount = 0;
