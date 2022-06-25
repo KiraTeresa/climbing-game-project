@@ -6,7 +6,6 @@ class Game {
     this.safetyEquipment = [];
     this.platforms = [];
     this.platformPositionLeft = true;
-    // this.helmet = new Helmet();
   }
 
   preload() {
@@ -21,7 +20,6 @@ class Game {
   play() {
     this.background.drawBackground();
     this.player.drawPlayer();
-    // this.helmet.drawHelmet();
 
     if (this.player.energy > 0 && this.player.safety < 10) {
       // Rocks and safety equipment randomly falling from mountain top:
@@ -135,6 +133,18 @@ class Game {
       if (platform.top > CANVAS_HEIGHT) {
         this.removeFromArr(this.platforms, platform);
       }
+
+      // Collision check with platform:
+      if (
+        this.isColliding(this.player, platform) &&
+        !platform.hitClimber &&
+        !platform.platformHasHelmet
+      ) {
+        this.player.energy -= 10;
+        platform.hitClimber = true;
+        this.player.boomChakalaka();
+      }
+      //
     });
   }
 

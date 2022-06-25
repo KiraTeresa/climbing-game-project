@@ -11,6 +11,8 @@ class Platform {
     this.helmWidth = 40;
     this.helmTop = this.top - this.helmHeight / 2;
     this.helmLeft = this.left + this.width - this.helmWidth;
+    this.platformHasHelmet = false;
+    this.hitClimber = false;
   }
 
   drawPlatform() {
@@ -25,6 +27,7 @@ class Platform {
           this.helmWidth,
           this.helmHeight
         );
+        this.platformHasHelmet = true;
       }
     } else {
       image(
@@ -43,6 +46,7 @@ class Platform {
           this.helmWidth,
           this.helmHeight
         );
+        this.platformHasHelmet = true;
       }
     }
     this.top += 2;
