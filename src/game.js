@@ -26,9 +26,6 @@ class Game {
     // Display energy and safety level of climber:
     this.displayEnergyLevel();
     this.displaySafetyLevel();
-
-    // Implement method to make climber img flicker when hit by rock:
-    this.player.flicker();
   }
 
   keyPressed() {
@@ -55,7 +52,8 @@ class Game {
       playerBottom > obstacleTop &&
       playerTop < obstacleBottom &&
       playerLeft < obstacleRight &&
-      playerRight > obstacleLeft
+      playerRight > obstacleLeft &&
+      player.canGetHit
     );
   }
 
@@ -79,19 +77,12 @@ class Game {
         this.player.timesHit++;
         this.player.energy -= 5;
         rock.hitClimber = true;
-        this.player.gotHit = true;
-        this.player.flickering = true;
-        this.player.frameCountAtHit = frameCount;
-        this.player.flicker();
+        // this.player.gotHit = true;
+        // this.player.flickering = true;
+        // this.player.frameCountAtHit = frameCount;
         console.log(this.player.timesHit);
+        this.player.boomChakalaka();
       }
-      // else {
-      //   this.player.flickering = false;
-      // }
-      // make climber img stop flickering:
-      // if (!this.isColliding(this.player, rock) && rock.hitClimber) {
-      //   this.player.stopFlicker();
-      // }
     });
   }
 

@@ -7,9 +7,29 @@ class Player {
     this.timesHit = 0;
     this.safety = 0;
     this.energy = ENERGY;
-    this.gotHit = false;
-    this.flickering = false;
-    this.frameCountAtHit = 0;
+    // this.gotHit = false;
+    // this.flickering = false;
+    // this.frameCountAtHit = 0;
+    this.shotTime = 0;
+    this.isTransparent = false;
+    this.canGetHit = true;
+  }
+
+  boomChakalaka() {
+    this.canGetHit = false;
+    this.shotTime = frameCount;
+  }
+
+  drawImage() {
+    image(this.img, this.left, this.top, this.width, this.height);
+    //  this.canGetHit = true;
+  }
+
+  semiTransparentDrawing() {
+    push();
+    tint(255, 128); // test to see if setting transparency works
+    this.drawImage();
+    pop();
   }
 
   preload() {
@@ -18,107 +38,40 @@ class Player {
     );
   }
 
-  drawPlayer() {
-    push();
-    // if (this.flickering) {
-    //   this.flicker();
-    if (this.gotHit) {
-      tint(255, 128); // test to see if setting transparency works
-      image(this.img, this.left, this.top, this.width, this.height);
-      noTint();
-    } else {
-      image(this.img, this.left, this.top, this.width, this.height);
-    }
-    // }
-    // else {
-    //   image(this.img, this.left, this.top, this.width, this.height);
-    // }
-    pop();
+  get right() {
+    return this.left + this.width;
   }
 
-  // -- trying on implementing a method which makes the player image flicker when hit by a rock --
-  flicker() {
-    // if (frameCount === frameCountAtHit + 180) {
-    //   this.gotHit = false;
-    // }
-    if (this.flickering) {
-      console.log(`FrameCountAtHit: ${this.frameCountAtHit}`);
-      if (frameCount <= this.frameCountAtHit + 10) {
-        this.gotHit = true;
-        console.log("Flicker 1");
-      } else if (
-        frameCount > this.frameCountAtHI + 10 &&
-        frameCount <= this.frameCountAtHit + 20
-      ) {
-        this.gotHit = false;
-      } else if (
-        frameCount > this.frameCountAtHI + 20 &&
-        frameCount <= this.frameCountAtHit + 30
-      ) {
-        this.gotHit = true;
-        console.log("Flicker 2");
-      } else if (
-        frameCount > this.frameCountAtHI + 30 &&
-        frameCount <= this.frameCountAtHit + 40
-      ) {
-        this.gotHit = false;
-      } else if (
-        frameCount > this.frameCountAtHI + 40 &&
-        frameCount <= this.frameCountAtHit + 50
-      ) {
-        this.gotHit = true;
-        console.log("Flicker 3");
-      } else if (frameCount > this.frameCountAtHit + 50) {
-        this.gotHit = false;
-        this.flickering = false;
-      }
+  isTimeToGoBackToNormal() {
+    // if this.shotTime === 0
+    // if there hasnt been any coliision yet, or if we say that we can collide again
+    if (!this.shotTime) {
+      return false;
     }
-    // // trying with a while loop:
-    // while (frameCount <= this.frameCountAtHit + 10) {
-    //   this.gotHit = true;
-    // }
-    // while (
-    //   frameCount > this.frameCountAtHI + 10 &&
-    //   frameCount <= this.frameCountAtHit + 20
-    // ) {
-    //   this.gotHit = false;
-    // }
-    // while (
-    //   frameCount > this.frameCountAtHI + 20 &&
-    //   frameCount <= this.frameCountAtHit + 30
-    // ) {
-    //   this.gotHit = true;
-    // }
-    // while (
-    //   frameCount > this.frameCountAtHI + 30 &&
-    //   frameCount <= this.frameCountAtHit + 40
-    // ) {
-    //   this.gotHit = false;
-    // }
-    // while (
-    //   frameCount > this.frameCountAtHI + 40 &&
-    //   frameCount <= this.frameCountAtHit + 50
-    // ) {
-    //   this.gotHit = true;
-    // }
-    // this.gotHit = false;
+    // this defines wether it has been 180 frames (3 seconds) since we got hit in the head by a rock
+    const isTime = this.shotTime + 180 <= frameCount;
+    // if it has been 3 seconds, we now need to let the player know that it can get hit once more
+    if (isTime) {
+      this.canGetHit = true;
+    }
+    return isTime;
+  }
 
-    //   //   // noTint();
-    //   //   // while (
-    //   //   //   frameCount > frameCountAtHit * 2 &&
-    //   //   //   frameCount <= frameCountAtHit * 3
-    //   //   // ) {
-    //   //   //   noTint();
-    //   //   // }
-    //   //   // while (
-    //   //   //   frameCount > frameCountAtHit * 3 &&
-    //   //   //   frameCount <= frameCountAtHit * 4
-    //   //   // ) {
-    //   //   //   tint(255, 128);
-    //   //   // }
-    //   //   // if (frameCount > frameCountAtHit * 4) {
-    //   //   //   noTint();
-    //   //   // }
+  drawPlayer() {
+    if (this.isTimeToGoBackToNormal() || this.canGetHit) {
+      return this.drawImage();
+    }
+
+    // From this point, youve taken a rock to the head
+
+    if (this.isTransparent) {
+      this.semiTransparentDrawing();
+    } else {
+      this.drawImage();
+    }
+    if (frameCount % 30 === 0) {
+      this.isTransparent = !this.isTransparent;
+    }
   }
 
   keyPressed() {
