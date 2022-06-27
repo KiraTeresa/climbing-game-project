@@ -14,8 +14,10 @@ class Game {
     this.background.preload();
     this.player.preload();
     rockImg = loadImage("./assets/a44g_3gj6_201006.png");
-    // soundFormats("wav", "mp3", "ogg");
-    // rockSound = loadSound("./assets/audio/mixkit-hard-typewriter-hit-1364.wav");
+    // soundFormats("mp3", "ogg");
+    // rockSound = loadSound(
+    //   "./assets/audio/mixkit-hard-typewriter-hit-1364 (online-audio-converter.com).mp3"
+    // );
     quickDrawImg = loadImage("./assets/quick-draw_415193651_adobe-stock.png");
     platformImg = loadImage("./assets/Pad_3_3.png");
     helmetImg = loadImage("./assets/helmet_vectorstock_22265240.png");
