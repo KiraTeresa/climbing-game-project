@@ -48,10 +48,10 @@ class Game {
     const playerTop = player.top;
     const obstacleBottom = obstacle.top + obstacle.height;
 
-    const playerLeft = player.left;
+    const playerLeft = player.left + 20;
     const obstacleRight = obstacle.left + obstacle.width;
 
-    const playerRight = player.left + player.width;
+    const playerRight = player.left + player.width - 20;
     const obstacleLeft = obstacle.left;
 
     return (
