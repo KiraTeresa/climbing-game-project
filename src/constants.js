@@ -14,6 +14,8 @@ let quickDrawImg;
 let platformImg;
 let helmetImg;
 
+// let rockSound;
+
 const GRAVITY = 0.1;
 
 let platformCount = 0;

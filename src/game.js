@@ -6,12 +6,15 @@ class Game {
     this.safetyEquipment = [];
     this.platforms = [];
     this.platformPositionLeft = true;
+    this.helmet = [];
   }
 
   preload() {
     this.background.preload();
     this.player.preload();
     rockImg = loadImage("./assets/a44g_3gj6_201006.png");
+    // soundFormats("wav");
+    // rockSound = loadSound("./assets/audio/mixkit-hard-typewriter-hit-1364.wav");
     quickDrawImg = loadImage("./assets/quick-draw_415193651_adobe-stock.png");
     platformImg = loadImage("./assets/Pad_3_3.png");
     helmetImg = loadImage("./assets/helmet_vectorstock_22265240.png");
@@ -25,8 +28,9 @@ class Game {
       // Rocks and safety equipment randomly falling from mountain top:
       this.rocksFalling();
       this.safetyEquipmentFalling();
+      this.helmetFalling();
       // Platforms appear every now and then:
-      this.platformAppearing();
+      // this.platformAppearing();
     }
 
     // Display energy and safety level of climber:
@@ -79,7 +83,12 @@ class Game {
       }
 
       // Check if climber got hit by a rock:
-      if (this.isColliding(this.player, rock) && !rock.hitClimber) {
+      if (
+        this.isColliding(this.player, rock) &&
+        !rock.hitClimber &&
+        !this.player.wearingHelmet
+      ) {
+        // rockSound.play();
         this.player.timesHit++;
         this.player.energy -= 5;
         rock.hitClimber = true;
@@ -88,6 +97,15 @@ class Game {
         // this.player.frameCountAtHit = frameCount;
         console.log(this.player.timesHit);
         this.player.boomChakalaka();
+      } else if (
+        this.isColliding(this.player, rock) &&
+        !rock.hitClimber &&
+        this.player.wearingHelmet
+      ) {
+        rock.hitClimber = true;
+        this.player.wearingHelmet = false;
+        this.player.safety -= 2;
+        this.removeFromArr(this.helmet, this.helmet[0]);
       }
     });
   }
@@ -108,10 +126,40 @@ class Game {
       }
 
       if (this.safetyEquipment.top >= CANVAS_HEIGHT) {
-        // this.safetyEquipment.splice(this.safetyEquipment.indexOf(item), 1);
         this.removeFromArr(this.safetyEquipment, item);
       }
     });
+  }
+
+  helmetFalling() {
+    // Create new helmet every ten seconds if player is not already wearing one:
+    if (frameCount % 120 === 0 && this.player.wearingHelmet === false) {
+      this.helmet.push(new Helmet(helmetImg));
+    }
+
+    this.helmet.forEach((helmet) => {
+      helmet.drawHelmet();
+
+      if (this.player.wearingHelmet === true) {
+        helmet.left = this.player.left + this.player.width / 2 - 27;
+        helmet.top = this.player.top;
+        helmet.speed = 0;
+      }
+
+      if (helmet.top >= CANVAS_HEIGHT) {
+        this.removeFromArr(this.helmet, helmet);
+      }
+
+      if (
+        this.isColliding(this.player, helmet) &&
+        this.player.wearingHelmet === false
+      ) {
+        this.player.wearingHelmet = true;
+        this.player.safety += 2;
+      }
+    });
+
+    console.log("Is wearing helmet: ", this.player.wearingHelmet);
   }
 
   platformAppearing() {
