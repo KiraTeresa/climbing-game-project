@@ -1,15 +1,15 @@
-class SafetyEquipment {
+class GranolaBar {
   constructor(img) {
-    this.height = 60;
-    this.width = 40;
-    this.top = -this.height;
+    this.height = 30;
+    this.width = 20;
     this.left = random(20, CANVAS_WIDTH - 20);
-    this.speed = 2;
+    this.top = -this.height;
+    this.speed = 1;
     this.img = img;
+    this.booster = 5;
   }
 
-  drawSafetyEquipment() {
-    // rect(this.left, this.top, this.width, this.height);
+  drawGranolaBar() {
     image(this.img, this.left, this.top, this.width, this.height);
     this.top += this.speed;
     this.speed += GRAVITY;

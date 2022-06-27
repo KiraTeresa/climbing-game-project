@@ -7,17 +7,19 @@ class Game {
     this.platforms = [];
     this.platformPositionLeft = true;
     this.helmet = [];
+    this.granolaBar = [];
   }
 
   preload() {
     this.background.preload();
     this.player.preload();
     rockImg = loadImage("./assets/a44g_3gj6_201006.png");
-    // soundFormats("wav");
+    // soundFormats("wav", "mp3", "ogg");
     // rockSound = loadSound("./assets/audio/mixkit-hard-typewriter-hit-1364.wav");
     quickDrawImg = loadImage("./assets/quick-draw_415193651_adobe-stock.png");
     platformImg = loadImage("./assets/Pad_3_3.png");
     helmetImg = loadImage("./assets/helmet_vectorstock_22265240.png");
+    granolaBarImg = loadImage("./assets/free-granola-bars-icons-vector.png");
   }
 
   play() {
@@ -29,6 +31,7 @@ class Game {
       this.rocksFalling();
       this.safetyEquipmentFalling();
       this.helmetFalling();
+      this.granolaBarFalling();
       // Platforms appear every now and then:
       // this.platformAppearing();
     }
@@ -82,7 +85,7 @@ class Game {
         this.removeFromArr(this.rocks, rock);
       }
 
-      // Check if climber got hit by a rock:
+      // Check if climber got hit by a rock and if she is not wearing a helmet:
       if (
         this.isColliding(this.player, rock) &&
         !rock.hitClimber &&
@@ -97,14 +100,16 @@ class Game {
         // this.player.frameCountAtHit = frameCount;
         console.log(this.player.timesHit);
         this.player.boomChakalaka();
-      } else if (
+      }
+      // action on collision while wearing a helmet:
+      else if (
         this.isColliding(this.player, rock) &&
         !rock.hitClimber &&
         this.player.wearingHelmet
       ) {
         rock.hitClimber = true;
         this.player.wearingHelmet = false;
-        this.player.safety -= 2;
+        this.player.safety -= 2; // less safety when helmet is no longer worn
         this.removeFromArr(this.helmet, this.helmet[0]);
       }
     });
@@ -133,7 +138,7 @@ class Game {
 
   helmetFalling() {
     // Create new helmet every ten seconds if player is not already wearing one:
-    if (frameCount % 120 === 0 && this.player.wearingHelmet === false) {
+    if (frameCount % 600 === 0 && this.player.wearingHelmet === false) {
       this.helmet.push(new Helmet(helmetImg));
     }
 
@@ -155,11 +160,33 @@ class Game {
         this.player.wearingHelmet === false
       ) {
         this.player.wearingHelmet = true;
-        this.player.safety += 2;
+        this.player.safety += 2; // safety increases while wearing a helmet
       }
     });
 
     console.log("Is wearing helmet: ", this.player.wearingHelmet);
+  }
+
+  granolaBarFalling() {
+    if (frameCount % 240 === 0) {
+      this.granolaBar.push(new GranolaBar(granolaBarImg));
+    }
+
+    this.granolaBar.forEach((bar) => {
+      bar.drawGranolaBar();
+
+      if (
+        this.isColliding(this.player, bar) &&
+        this.player.energy < ENERGY - bar.booster
+      ) {
+        this.player.energy += bar.booster;
+        this.removeFromArr(this.granolaBar, bar);
+      }
+
+      if (bar.top >= CANVAS_HEIGHT) {
+        this.removeFromArr(this.granolaBar, bar);
+      }
+    });
   }
 
   platformAppearing() {

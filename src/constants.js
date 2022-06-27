@@ -13,6 +13,7 @@ let rockImg;
 let quickDrawImg;
 let platformImg;
 let helmetImg;
+let granolaBarImg;
 
 // let rockSound;
 
