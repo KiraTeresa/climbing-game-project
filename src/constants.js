@@ -9,14 +9,17 @@ const ENERGY_RECT_WIDTH = 20;
 
 const ENERGY = 100;
 
+// images of objects:
 let rockImg;
 let quickDrawImg;
 let platformImg;
 let helmetImg;
 let granolaBarImg;
 
+// sounds for collisions:
 let rockSound;
 let quickDrawSound;
+let eatingSound;
 
 const GRAVITY = 0.1;
 

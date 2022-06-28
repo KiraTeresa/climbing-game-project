@@ -25,6 +25,9 @@ class Game {
     quickDrawSound = loadSound(
       "./assets/audio/mixkit-quick-win-video-game-notification-269.wav"
     );
+    eatingSound = loadSound(
+      "./assets/audio/mixkit-chewing-something-crunchy-2244.wav"
+    );
   }
 
   play() {
@@ -186,6 +189,7 @@ class Game {
         this.isColliding(this.player, bar) &&
         this.player.energy <= ENERGY - bar.booster
       ) {
+        eatingSound.play();
         this.player.energy += bar.booster;
         this.removeFromArr(this.granolaBar, bar);
       }
