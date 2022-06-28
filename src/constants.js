@@ -16,6 +16,7 @@ let helmetImg;
 let granolaBarImg;
 
 let rockSound;
+let quickDrawSound;
 
 const GRAVITY = 0.1;
 
