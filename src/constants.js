@@ -7,7 +7,8 @@ const ENTER = 13;
 
 const ENERGY_RECT_WIDTH = 20;
 
-const ENERGY = 100;
+const ENERGY = 50;
+const SAFETY = 5;
 
 // images of objects:
 let rockImg;
@@ -16,10 +17,11 @@ let platformImg;
 let helmetImg;
 let granolaBarImg;
 
-// sounds for collisions:
+// sounds:
 let rockSound;
 let quickDrawSound;
 let eatingSound;
+let victorySound;
 
 const GRAVITY = 0.1;
 

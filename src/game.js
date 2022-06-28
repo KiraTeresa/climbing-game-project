@@ -28,6 +28,7 @@ class Game {
     eatingSound = loadSound(
       "./assets/audio/mixkit-chewing-something-crunchy-2244.wav"
     );
+    victorySound = loadSound("./assets/audio/yodel.mp3");
   }
 
   play() {
@@ -242,7 +243,6 @@ class Game {
     pop();
 
     // create green ellipse:
-    // let radius = this.player.energy * 0.2;
     let radius = 20;
     push();
     fill("SeaGreen");
@@ -255,6 +255,7 @@ class Game {
       textAlign(CENTER, CENTER);
       text(`Energy: ${this.player.energy}`, 55, 22);
     }
+
     // show game over screen when no more energy left:
     else {
       push();
@@ -267,7 +268,7 @@ class Game {
   }
 
   displaySafetyLevel() {
-    // create rect:
+    // create ellipse:
     rect(CANVAS_WIDTH - 105, 5, 100, 30, 20, 20, 20, 20);
 
     // set text with current safety level:
@@ -276,7 +277,7 @@ class Game {
     text(`Safety: ${this.player.safety}`, CANVAS_WIDTH - 55, 22);
 
     // show victory screen when player collected enough safety equipment:
-    if (this.player.safety === 10) {
+    if (this.player.safety >= SAFETY) {
       this.victory();
     }
   }
@@ -287,7 +288,6 @@ class Game {
 
   gameOver() {
     this.background.moving = false;
-    this.player.flickering = false;
 
     push();
     fill(169, 169, 169);
@@ -359,6 +359,11 @@ class Game {
       (CANVAS_HEIGHT / 3) * 2.5 + 100
     );
     pop();
+
+    // play victory sound:
+    if (!victorySound.isPlaying()) {
+      victorySound.play();
+    }
   }
 
   restartGame() {
