@@ -22,21 +22,24 @@ class Game {
 
     soundFormats("mp3", "ogg", "wav");
     rockSound = loadSound("./assets/audio/mixkit-hard-typewriter-hit-1364.wav");
-    quickDrawSound = loadSound(
+    safetyEquipmentSound = loadSound(
       "./assets/audio/mixkit-quick-win-video-game-notification-269.wav"
     );
     eatingSound = loadSound(
       "./assets/audio/mixkit-chewing-something-crunchy-2244.wav"
     );
     victorySound = loadSound("./assets/audio/yodel.mp3");
+    gameOverSound = loadSound(
+      "./assets/audio/mixkit-slow-sad-trombone-fail-472.wav"
+    );
   }
 
   play() {
     this.background.drawBackground();
     this.player.drawPlayer();
 
-    if (this.player.energy > 0 && this.player.safety < 10) {
-      // Rocks and safety equipment randomly falling from mountain top:
+    if (this.player.energy > 0 && this.player.safety < SAFETY) {
+      // Objects randomly falling from mountain top:
       this.rocksFalling();
       this.safetyEquipmentFalling();
       this.helmetFalling();
@@ -136,7 +139,7 @@ class Game {
       item.drawSafetyEquipment();
 
       if (this.isColliding(this.player, item)) {
-        quickDrawSound.play();
+        safetyEquipmentSound.play();
         this.player.safety++;
         this.removeFromArr(this.safetyEquipment, item);
       }
@@ -170,6 +173,7 @@ class Game {
         this.isColliding(this.player, helmet) &&
         this.player.wearingHelmet === false
       ) {
+        safetyEquipmentSound.play();
         this.player.wearingHelmet = true;
         this.player.safety += 2; // safety increases while wearing a helmet
       }
@@ -239,14 +243,14 @@ class Game {
     // create red ellipse:
     push();
     fill("#C30E0E");
-    rect(5, 5, 100, 30, 20, 20, 20, 20);
+    rect(5, 5, ENERGY * 2, 30, 20, 20, 20, 20);
     pop();
 
     // create green ellipse:
     let radius = 20;
     push();
     fill("SeaGreen");
-    rect(5, 5, this.player.energy, 30, radius, radius, radius, radius); // rect(x, y, w, h, top-left radius, tr radius, br radius, bl radius)
+    rect(5, 5, this.player.energy * 2, 30, radius, radius, radius, radius); // rect(x, y, w, h, top-left radius, tr radius, br radius, bl radius)
     pop();
 
     // set text with current energy level:
@@ -321,6 +325,11 @@ class Game {
       CANVAS_HEIGHT / 2 + 100
     );
     pop();
+
+    // play game over sound:
+    if (!gameOverSound.isPlaying()) {
+      gameOverSound.play();
+    }
   }
 
   victory() {
@@ -367,8 +376,16 @@ class Game {
   }
 
   restartGame() {
+    this.background.moving = true;
+
+    // resetting stats:
     this.player.energy = ENERGY;
     this.player.safety = 0;
-    this.background.moving = true;
+
+    // clearing obstacle arrays:
+    this.rocks = [];
+    this.safetyEquipment = [];
+    this.helmet = [];
+    this.granolaBar = [];
   }
 }

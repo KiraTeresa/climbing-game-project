@@ -14,10 +14,5 @@ class Rock {
     image(this.img, this.left, this.top, this.width, this.height);
     this.top += this.speed;
     this.speed += GRAVITY;
-
-    // if (this.hitClimber) {
-    //   rockSound.play();
-    //   rockSound.setVolume(0.1);
-    // }
   }
 }
