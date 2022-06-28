@@ -15,7 +15,7 @@ let platformImg;
 let helmetImg;
 let granolaBarImg;
 
-// let rockSound;
+let rockSound;
 
 const GRAVITY = 0.1;
 

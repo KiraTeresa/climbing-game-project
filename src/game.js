@@ -14,10 +14,8 @@ class Game {
     this.background.preload();
     this.player.preload();
     rockImg = loadImage("./assets/a44g_3gj6_201006.png");
-    // soundFormats("mp3", "ogg");
-    // rockSound = loadSound(
-    //   "./assets/audio/mixkit-hard-typewriter-hit-1364 (online-audio-converter.com).mp3"
-    // );
+    soundFormats("mp3", "ogg", "wav");
+    rockSound = loadSound("./assets/audio/mixkit-hard-typewriter-hit-1364.wav");
     quickDrawImg = loadImage("./assets/quick-draw_415193651_adobe-stock.png");
     platformImg = loadImage("./assets/Pad_3_3.png");
     helmetImg = loadImage("./assets/helmet_vectorstock_22265240.png");
@@ -93,7 +91,7 @@ class Game {
         !rock.hitClimber &&
         !this.player.wearingHelmet
       ) {
-        // rockSound.play();
+        rockSound.play();
         this.player.timesHit++;
         this.player.energy -= 5;
         rock.hitClimber = true;
@@ -179,7 +177,7 @@ class Game {
 
       if (
         this.isColliding(this.player, bar) &&
-        this.player.energy < ENERGY - bar.booster
+        this.player.energy <= ENERGY - bar.booster
       ) {
         this.player.energy += bar.booster;
         this.removeFromArr(this.granolaBar, bar);
