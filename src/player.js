@@ -14,6 +14,8 @@ class Player {
     this.isTransparent = false;
     this.canGetHit = true;
     this.wearingHelmet = false;
+    this.quickDrawsOnHarness = 0;
+    this.granolaBarsEaten = 0;
   }
 
   boomChakalaka() {

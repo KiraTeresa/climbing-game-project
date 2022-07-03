@@ -10,6 +10,7 @@ class Game {
     this.granolaBar = [];
     this.soundPlayed = false;
     this.bolts = [];
+    this.quickDraw = [];
   }
 
   preload() {
@@ -160,6 +161,12 @@ class Game {
         safetyEquipmentSound.play();
         this.player.safety++;
         this.removeFromArr(this.safetyEquipment, item);
+        this.quickDraw.push(new SafetyEquipment(quickDrawImg));
+        console.log(this.quickDraw);
+
+        // Keep count of how many quick draws are on belt
+        this.player.quickDrawsOnHarness++;
+        console.log("Qick Draws collected: ", this.player.quickDrawsOnHarness);
       }
 
       if (this.safetyEquipment.top >= CANVAS_HEIGHT) {
@@ -210,10 +217,12 @@ class Game {
 
       if (
         this.isColliding(this.player, bar) &&
-        this.player.energy <= ENERGY - bar.booster
+        this.player.energy <= ENERGY - bar.booster &&
+        this.player.granolaBarsEaten < 2
       ) {
         eatingSound.play();
         this.player.energy += bar.booster;
+        this.player.granolaBarsEaten++;
         this.removeFromArr(this.granolaBar, bar);
       }
 
@@ -259,7 +268,7 @@ class Game {
 
   boltsShowing() {
     if (frameCount % 180 === 0) {
-      this.bolts.push(new Bolt());
+      this.bolts.push(new Bolt(quickDrawImg));
     }
 
     // Draw bolts:
@@ -270,7 +279,37 @@ class Game {
       if (bolt.x >= CANVAS_HEIGHT) {
         this.removeFromArr(this.bolts, bolt);
       }
+
+      // Check for collision with player
+      // Make sure there are still quickdraws left on the harness
+      // Make sure there isn't already a quickdraw attached to the bolt
+      // Space key needs to be pressed:
+      if (
+        this.isColliding(this.player, bolt) &&
+        !bolt.hasQuickDraw &&
+        keyCode === SPACE &&
+        this.player.quickDrawsOnHarness
+      ) {
+        this.placeQuickDraw(bolt);
+      }
     });
+  }
+
+  placeQuickDraw(bolt) {
+    // Bolt now has a quickdraw attached:
+    bolt.hasQuickDraw = true;
+
+    // Remove a quickdraw from the harness:
+    this.quickDraw.shift();
+    this.player.quickDrawsOnHarness--;
+
+    // Safety goes up when quickdraw was placed in bolt:
+    this.player.safety++;
+
+    console.log(
+      "Qick Draws after placement: ",
+      this.player.quickDrawsOnHarness
+    );
   }
 
   displayEnergyLevel() {
@@ -418,12 +457,16 @@ class Game {
     // resetting stats:
     this.player.energy = ENERGY;
     this.player.safety = 0;
+    this.player.wearingHelmet = false;
+    this.player.quickDrawsOnHarness = 0;
 
     // clearing obstacle arrays:
     this.rocks = [];
     this.safetyEquipment = [];
     this.helmet = [];
     this.granolaBar = [];
+    this.bolts = [];
+    this.quickDraw = [];
   }
 
   startingScreen() {

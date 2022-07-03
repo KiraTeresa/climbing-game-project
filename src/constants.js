@@ -5,6 +5,7 @@ const CANVAS_HEIGHT = 800;
 const LEFT_ARROW = 37;
 const RIGHT_ARROW = 39;
 const ENTER = 13;
+const SPACE = 32;
 
 const ENERGY_RECT_WIDTH = 20;
 
