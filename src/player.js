@@ -78,9 +78,12 @@ class Player {
   }
 
   keyPressed() {
-    if (keyCode === LEFT_ARROW) {
+    if (keyCode === LEFT_ARROW && this.left >= 0) {
       this.left -= 20;
-    } else if (keyCode === RIGHT_ARROW) {
+    } else if (
+      keyCode === RIGHT_ARROW &&
+      this.left + this.width <= CANVAS_WIDTH
+    ) {
       this.left += 20;
     }
   }

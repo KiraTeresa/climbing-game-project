@@ -7,12 +7,23 @@ const RIGHT_ARROW = 39;
 const ENTER = 13;
 const SPACE = 32;
 
+// general values for positioning of the stats:
 const ENERGY_RECT_WIDTH = 20;
 const DISPLAY_TOP = 5;
 const DISPLAY_TEXT_TOP = 22;
 
+// starting energy level of player:
 const ENERGY = 50;
-const SAFETY = 5;
+
+// number of quickdraws to be collected in level 1:
+const NUM_QUICKDRAWS = 4;
+
+// safety level to be reached in level 2:
+const SAFETY = 10;
+
+// general values for moving obstacles and background:
+const GRAVITY = 0.1;
+const BACKGROUND_SPEED = 2;
 
 // images of objects:
 let rockImg;
@@ -28,8 +39,4 @@ let eatingSound;
 let victorySound;
 let gameOverSound;
 
-const GRAVITY = 0.1;
-
 let platformCount = 0;
-
-const BACKGROUND_SPEED = 2;

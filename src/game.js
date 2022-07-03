@@ -55,14 +55,18 @@ class Game {
       // Platforms appear every now and then:
       // this.platformAppearing();
 
-      // Bolts showing:
-      this.boltsShowing();
+      // Bolts will be added when player reaches level 2:
+      if (this.level === 2) {
+        // Bolts showing:
+        this.boltsShowing();
+      }
     }
 
     // Display energy and safety level of climber as well as the game level:
     this.displayEnergyLevel();
     this.displaySafetyLevel();
     this.displayLevel();
+    this.displayNumOfQuickdrawsOnHarness();
 
     // Show starting screen:
     if (
@@ -161,12 +165,16 @@ class Game {
 
       if (this.isColliding(this.player, item)) {
         safetyEquipmentSound.play();
-        this.player.safety++;
         this.removeFromArr(this.safetyEquipment, item);
         this.quickDraw.push(new SafetyEquipment(quickDrawImg));
         console.log(this.quickDraw);
 
-        // Keep count of how many quick draws are on belt
+        // collecting quickdraws only increases player safety when in level 1:
+        if (this.level === 1) {
+          this.player.safety++;
+        }
+
+        // Keep count of how many quick draws are on the harness:
         this.player.quickDrawsOnHarness++;
         console.log("Qick Draws collected: ", this.player.quickDrawsOnHarness);
       }
@@ -278,7 +286,12 @@ class Game {
       bolt.drawBolt();
 
       // Remove bolt from array when outside canvas:
-      if (bolt.x >= CANVAS_HEIGHT) {
+      if (bolt.top >= CANVAS_HEIGHT) {
+        // decrease player safety when bolt is leaving the canvas without a quickdraw attached to it:
+        if (bolt.hasQuickDraw === false && this.player.safety > 0) {
+          this.player.safety--;
+        }
+
         this.removeFromArr(this.bolts, bolt);
       }
 
@@ -364,10 +377,46 @@ class Game {
     textAlign(CENTER, CENTER);
     text(`Safety: ${this.player.safety}`, CANVAS_WIDTH - 55, DISPLAY_TEXT_TOP);
 
-    // show victory screen when player collected enough safety equipment:
-    if (this.player.safety >= SAFETY) {
+    // Ensure safety cannot be less than zero:
+    if (this.player.safety < 0) {
+      this.player.safety = 0;
+    }
+
+    // Move up to next level:
+    if (
+      this.level === 1 &&
+      this.player.quickDrawsOnHarness >= NUM_QUICKDRAWS &&
+      this.player.wearingHelmet
+    ) {
+      this.level = 2;
+      this.player.granolaBarsEaten = 0;
+    }
+
+    // show victory screen when player reached certain level of safety:
+    if (this.level === 2 && this.player.safety >= SAFETY) {
       this.victory();
     }
+  }
+
+  displayNumOfQuickdrawsOnHarness() {
+    // create ellipse:
+    if (this.level === 1 && this.player.quickDrawsOnHarness >= NUM_QUICKDRAWS) {
+      push();
+      fill("SeaGreen");
+      rect(CANVAS_WIDTH - 200, CANVAS_HEIGHT - 30, 200, 30);
+      pop();
+    } else {
+      rect(CANVAS_WIDTH - 200, CANVAS_HEIGHT - 30, 200, 30);
+    }
+
+    // set text with number of quickdraws on harness:
+    textSize(16);
+    textAlign(CENTER, CENTER);
+    text(
+      `Quickdraws: ${this.player.quickDrawsOnHarness}`,
+      CANVAS_WIDTH - 100,
+      CANVAS_HEIGHT - 15
+    );
   }
 
   displayLevel() {
@@ -375,8 +424,21 @@ class Game {
     rect(CANVAS_WIDTH / 2 - 50, DISPLAY_TOP, 100, 30, 20);
 
     // set text with current level:
-    textSize(16);
-    text(`Level: ${this.level}`, CANVAS_WIDTH / 2, DISPLAY_TEXT_TOP);
+    if (this.level === 2) {
+      push();
+      textSize(16);
+      textStyle(BOLD);
+      fill(205, 92, 92);
+      text(`Level: ${this.level}`, CANVAS_WIDTH / 2, DISPLAY_TEXT_TOP);
+      pop();
+    } else {
+      push();
+      textSize(16);
+      textStyle(BOLD);
+      fill(0, 102, 153);
+      text(`Level: ${this.level}`, CANVAS_WIDTH / 2, DISPLAY_TEXT_TOP);
+      pop();
+    }
   }
 
   removeFromArr(arr, obstacle) {
@@ -480,6 +542,7 @@ class Game {
     this.player.wearingHelmet = false;
     this.player.quickDrawsOnHarness = 0;
     this.player.granolaBarsEaten = 0;
+    this.level = 1;
 
     // clearing obstacle arrays:
     this.rocks = [];
@@ -500,13 +563,17 @@ class Game {
     push();
     textSize(60);
     textAlign(CENTER, CENTER);
-    text("Welcome!", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 30);
+    text("Ready to climb?", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 30);
     pop();
 
     push();
     textSize(20);
     textAlign(CENTER, CENTER);
-    text("To your multi-pitch climb", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 30);
+    text(
+      "Look at the Topo for the rules of the game",
+      CANVAS_WIDTH / 2,
+      CANVAS_HEIGHT / 2 + 30
+    );
     pop();
 
     // text to tart the game:
