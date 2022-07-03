@@ -459,6 +459,7 @@ class Game {
     this.player.safety = 0;
     this.player.wearingHelmet = false;
     this.player.quickDrawsOnHarness = 0;
+    this.player.granolaBarsEaten = 0;
 
     // clearing obstacle arrays:
     this.rocks = [];
