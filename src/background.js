@@ -1,7 +1,7 @@
 class Background {
   constructor() {
     this.top = 0;
-    this.moving = true;
+    this.moving = false;
   }
 
   preload() {

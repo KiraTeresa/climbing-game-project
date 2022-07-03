@@ -8,6 +8,7 @@ class Game {
     this.platformPositionLeft = true;
     this.helmet = [];
     this.granolaBar = [];
+    this.soundPlayed = false;
   }
 
   preload() {
@@ -38,7 +39,11 @@ class Game {
     this.background.drawBackground();
     this.player.drawPlayer();
 
-    if (this.player.energy > 0 && this.player.safety < SAFETY) {
+    if (
+      this.player.energy > 0 &&
+      this.player.safety < SAFETY &&
+      this.background.moving
+    ) {
       // Objects randomly falling from mountain top:
       this.rocksFalling();
       this.safetyEquipmentFalling();
@@ -51,11 +56,20 @@ class Game {
     // Display energy and safety level of climber:
     this.displayEnergyLevel();
     this.displaySafetyLevel();
+
+    // Show starting screen:
+    if (
+      this.player.energy > 0 &&
+      this.player.safety < SAFETY &&
+      !this.background.moving
+    ) {
+      this.startingScreen();
+    }
   }
 
   keyPressed() {
     this.player.keyPressed();
-    if (keyCode === ENTER) {
+    if (keyCode === ENTER && !this.background.moving) {
       this.restartGame();
     }
   }
@@ -84,7 +98,7 @@ class Game {
 
   rocksFalling() {
     // Create a rock every second:
-    if (frameCount % 60 === 0) {
+    if (frameCount % 30 === 0) {
       this.rocks.push(new Rock(rockImg));
     }
 
@@ -327,8 +341,9 @@ class Game {
     pop();
 
     // play game over sound:
-    if (!gameOverSound.isPlaying()) {
+    if (!gameOverSound.isPlaying() && !this.soundPlayed) {
       gameOverSound.play();
+      this.soundPlayed = true;
     }
   }
 
@@ -370,13 +385,15 @@ class Game {
     pop();
 
     // play victory sound:
-    if (!victorySound.isPlaying()) {
+    if (!victorySound.isPlaying() && !this.soundPlayed) {
       victorySound.play();
+      this.soundPlayed = true;
     }
   }
 
   restartGame() {
     this.background.moving = true;
+    this.soundPlayed = false;
 
     // resetting stats:
     this.player.energy = ENERGY;
@@ -387,5 +404,36 @@ class Game {
     this.safetyEquipment = [];
     this.helmet = [];
     this.granolaBar = [];
+  }
+
+  startingScreen() {
+    push();
+    fill(169, 169, 169);
+    rect(0, CANVAS_HEIGHT / 3, CANVAS_WIDTH, CANVAS_HEIGHT / 3);
+    pop();
+
+    // show welcome message:
+    push();
+    textSize(60);
+    textAlign(CENTER, CENTER);
+    text("Welcome!", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 30);
+    pop();
+
+    push();
+    textSize(20);
+    textAlign(CENTER, CENTER);
+    text("To your multi-pitch climb", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 30);
+    pop();
+
+    // text to tart the game:
+    push();
+    textSize(14);
+    textAlign(CENTER, BOTTOM);
+    text(
+      "Press Enter to start the game",
+      CANVAS_WIDTH / 2,
+      CANVAS_HEIGHT / 2 + 100
+    );
+    pop();
   }
 }
