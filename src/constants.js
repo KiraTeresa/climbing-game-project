@@ -8,6 +8,8 @@ const ENTER = 13;
 const SPACE = 32;
 
 const ENERGY_RECT_WIDTH = 20;
+const DISPLAY_TOP = 5;
+const DISPLAY_TEXT_TOP = 22;
 
 const ENERGY = 50;
 const SAFETY = 5;

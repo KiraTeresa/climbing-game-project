@@ -11,6 +11,7 @@ class Game {
     this.soundPlayed = false;
     this.bolts = [];
     this.quickDraw = [];
+    this.level = 1;
   }
 
   preload() {
@@ -58,9 +59,10 @@ class Game {
       this.boltsShowing();
     }
 
-    // Display energy and safety level of climber:
+    // Display energy and safety level of climber as well as the game level:
     this.displayEnergyLevel();
     this.displaySafetyLevel();
+    this.displayLevel();
 
     // Show starting screen:
     if (
@@ -316,21 +318,30 @@ class Game {
     // create red ellipse:
     push();
     fill("#C30E0E");
-    rect(5, 5, ENERGY * 2, 30, 20, 20, 20, 20);
+    rect(5, DISPLAY_TOP, ENERGY * 2, 30, 20);
     pop();
 
     // create green ellipse:
     let radius = 20;
     push();
     fill("SeaGreen");
-    rect(5, 5, this.player.energy * 2, 30, radius, radius, radius, radius); // rect(x, y, w, h, top-left radius, tr radius, br radius, bl radius)
+    rect(
+      5,
+      DISPLAY_TOP,
+      this.player.energy * 2,
+      30,
+      radius,
+      radius,
+      radius,
+      radius
+    ); // rect(x, y, w, h, top-left radius, tr radius, br radius, bl radius)
     pop();
 
     // set text with current energy level:
     if (this.player.energy > 0) {
       textSize(16);
       textAlign(CENTER, CENTER);
-      text(`Energy: ${this.player.energy}`, 55, 22);
+      text(`Energy: ${this.player.energy}`, 55, DISPLAY_TEXT_TOP);
     }
 
     // show game over screen when no more energy left:
@@ -338,7 +349,7 @@ class Game {
       push();
       textSize(15);
       textAlign(CENTER, CENTER);
-      text(`Too tired`, 55, 22);
+      text(`Too tired`, 55, DISPLAY_TEXT_TOP);
       pop();
       this.gameOver();
     }
@@ -346,17 +357,26 @@ class Game {
 
   displaySafetyLevel() {
     // create ellipse:
-    rect(CANVAS_WIDTH - 105, 5, 100, 30, 20, 20, 20, 20);
+    rect(CANVAS_WIDTH - 105, DISPLAY_TOP, 100, 30, 20);
 
     // set text with current safety level:
     textSize(16);
     textAlign(CENTER, CENTER);
-    text(`Safety: ${this.player.safety}`, CANVAS_WIDTH - 55, 22);
+    text(`Safety: ${this.player.safety}`, CANVAS_WIDTH - 55, DISPLAY_TEXT_TOP);
 
     // show victory screen when player collected enough safety equipment:
     if (this.player.safety >= SAFETY) {
       this.victory();
     }
+  }
+
+  displayLevel() {
+    // create ellipse:
+    rect(CANVAS_WIDTH / 2 - 50, DISPLAY_TOP, 100, 30, 20);
+
+    // set text with current level:
+    textSize(16);
+    text(`Level: ${this.level}`, CANVAS_WIDTH / 2, DISPLAY_TEXT_TOP);
   }
 
   removeFromArr(arr, obstacle) {
