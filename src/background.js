@@ -13,7 +13,7 @@ class Background {
     image(this.img, 0, this.top - CANVAS_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT);
 
     if (this.moving) {
-      this.top += 2;
+      this.top += BACKGROUND_SPEED;
 
       if (this.top >= CANVAS_HEIGHT) {
         this.top = 0;

@@ -9,6 +9,7 @@ class Game {
     this.helmet = [];
     this.granolaBar = [];
     this.soundPlayed = false;
+    this.bolts = [];
   }
 
   preload() {
@@ -51,6 +52,9 @@ class Game {
       this.granolaBarFalling();
       // Platforms appear every now and then:
       // this.platformAppearing();
+
+      // Bolts showing:
+      this.boltsShowing();
     }
 
     // Display energy and safety level of climber:
@@ -250,6 +254,22 @@ class Game {
         this.player.boomChakalaka();
       }
       //
+    });
+  }
+
+  boltsShowing() {
+    if (frameCount % 180 === 0) {
+      this.bolts.push(new Bolt());
+    }
+
+    // Draw bolts:
+    this.bolts.forEach((bolt) => {
+      bolt.drawBolt();
+
+      // Remove bolt from array when outside canvas:
+      if (bolt.x >= CANVAS_HEIGHT) {
+        this.removeFromArr(this.bolts, bolt);
+      }
     });
   }
 

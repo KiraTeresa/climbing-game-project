@@ -28,3 +28,5 @@ let gameOverSound;
 const GRAVITY = 0.1;
 
 let platformCount = 0;
+
+const BACKGROUND_SPEED = 2;
