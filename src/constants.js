@@ -7,6 +7,12 @@ const RIGHT_ARROW = 39;
 const ENTER = 13;
 const SPACE = 32;
 
+// key images:
+let arrowLeftImg;
+let arrowRightImg;
+let enterImg;
+let spaceImg;
+
 // general values for positioning of the stats:
 const ENERGY_RECT_WIDTH = 20;
 const DISPLAY_TOP = 5;
@@ -38,5 +44,8 @@ let safetyEquipmentSound;
 let eatingSound;
 let victorySound;
 let gameOverSound;
+
+// variable which stores current level:
+let currentLevel = 0;
 
 let platformCount = 0;

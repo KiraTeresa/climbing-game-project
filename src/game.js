@@ -11,19 +11,38 @@ class Game {
     this.soundPlayed = false;
     this.bolts = [];
     this.quickDraw = [];
-    this.level = 1;
+    // currentLevel = currentLevel;
+    // this.topo = new Topo(); // disabled because it slows down the game to much
+    this.screenShown = "Start";
   }
 
   preload() {
     this.background.preload();
     this.player.preload();
+    // this.topo.preload();
 
+    // Images of the obstacles:
     rockImg = loadImage("./assets/a44g_3gj6_201006.png");
     quickDrawImg = loadImage("./assets/quick-draw_415193651_adobe-stock.png");
     platformImg = loadImage("./assets/Pad_3_3.png");
     helmetImg = loadImage("./assets/helmet_vectorstock_22265240.png");
     granolaBarImg = loadImage("./assets/free-granola-bars-icons-vector.png");
 
+    // Images of the keys:
+    arrowLeftImg = loadImage(
+      "./assets/graphics/vecteezy_keyboard-keys-with-flat-design-style_arrow-left.png"
+    );
+    arrowRightImg = loadImage(
+      "./assets/graphics/vecteezy_keyboard-keys-with-flat-design-style_arrow-right.png"
+    );
+    enterImg = loadImage(
+      "./assets/graphics/vecteezy_keyboard-keys-with-flat-design-style_enter.png"
+    );
+    spaceImg = loadImage(
+      "./assets/graphics/vecteezy_keyboard-keys-with-flat-design-style_space.png"
+    );
+
+    // Sounds:
     soundFormats("mp3", "ogg", "wav");
     rockSound = loadSound("./assets/audio/mixkit-hard-typewriter-hit-1364.wav");
     safetyEquipmentSound = loadSound(
@@ -41,6 +60,7 @@ class Game {
   play() {
     this.background.drawBackground();
     this.player.drawPlayer();
+    // this.topo.drawTopo();
 
     if (
       this.player.energy > 0 &&
@@ -56,7 +76,7 @@ class Game {
       // this.platformAppearing();
 
       // Bolts will be added when player reaches level 2:
-      if (this.level === 2) {
+      if (currentLevel === 2) {
         // Bolts showing:
         this.boltsShowing();
       }
@@ -69,19 +89,56 @@ class Game {
     this.displayNumOfQuickdrawsOnHarness();
 
     // Show starting screen:
-    if (
-      this.player.energy > 0 &&
-      this.player.safety < SAFETY &&
-      !this.background.moving
-    ) {
-      this.startingScreen();
+    // if (
+    //   this.player.energy > 0 &&
+    //   this.player.safety < SAFETY &&
+    //   !this.background.moving
+    // ) {
+    //   this.startingScreen();
+    // }
+
+    switch (this.screenShown) {
+      case "Start":
+        this.startingScreen();
+        break;
+      case "Level1":
+        this.screenLevel1();
+        break;
+      case "Level2":
+        this.screenLevel2();
+        break;
+      case "GameOver":
+        this.gameOverScreen();
+        break;
+      case "Victory":
+        this.victoryScreen();
+        break;
+      // default:
+      //   this.startingScreen();
+      //   break;
     }
   }
 
   keyPressed() {
     this.player.keyPressed();
     if (keyCode === ENTER && !this.background.moving) {
-      this.restartGame();
+      if (
+        this.screenShown === "Start" ||
+        this.screenShown === "GameOver" ||
+        this.screenShown === "Victory"
+      ) {
+        this.screenShown = "Level1";
+        currentLevel = 1;
+      } else if (this.screenShown === "Level1") {
+        // start level 1
+        this.restartGame();
+      } else if (this.screenShown === "Level2") {
+        // start level 2
+        this.background.moving = true;
+        currentLevel = 2;
+        this.player.granolaBarsEaten = 0;
+        this.screenShown = "";
+      }
     }
   }
 
@@ -170,7 +227,7 @@ class Game {
         console.log(this.quickDraw);
 
         // collecting quickdraws only increases player safety when in level 1:
-        if (this.level === 1) {
+        if (currentLevel === 1) {
           this.player.safety++;
         }
 
@@ -384,23 +441,28 @@ class Game {
 
     // Move up to next level:
     if (
-      this.level === 1 &&
+      currentLevel === 1 &&
       this.player.quickDrawsOnHarness >= NUM_QUICKDRAWS &&
       this.player.wearingHelmet
     ) {
-      this.level = 2;
-      this.player.granolaBarsEaten = 0;
+      this.background.moving = false;
+      this.screenShown = "Level2";
+      // currentLevel = 2;
+      // this.player.granolaBarsEaten = 0;
     }
 
     // show victory screen when player reached certain level of safety:
-    if (this.level === 2 && this.player.safety >= SAFETY) {
+    if (currentLevel === 2 && this.player.safety >= SAFETY) {
       this.victory();
     }
   }
 
   displayNumOfQuickdrawsOnHarness() {
     // create ellipse:
-    if (this.level === 1 && this.player.quickDrawsOnHarness >= NUM_QUICKDRAWS) {
+    if (
+      currentLevel === 1 &&
+      this.player.quickDrawsOnHarness >= NUM_QUICKDRAWS
+    ) {
       push();
       fill("SeaGreen");
       rect(CANVAS_WIDTH - 200, CANVAS_HEIGHT - 30, 200, 30);
@@ -424,19 +486,19 @@ class Game {
     rect(CANVAS_WIDTH / 2 - 50, DISPLAY_TOP, 100, 30, 20);
 
     // set text with current level:
-    if (this.level === 2) {
+    if (currentLevel === 2) {
       push();
       textSize(16);
       textStyle(BOLD);
       fill(205, 92, 92);
-      text(`Level: ${this.level}`, CANVAS_WIDTH / 2, DISPLAY_TEXT_TOP);
+      text(`Level: ${currentLevel}`, CANVAS_WIDTH / 2, DISPLAY_TEXT_TOP);
       pop();
     } else {
       push();
       textSize(16);
       textStyle(BOLD);
       fill(0, 102, 153);
-      text(`Level: ${this.level}`, CANVAS_WIDTH / 2, DISPLAY_TEXT_TOP);
+      text(`Level: ${currentLevel}`, CANVAS_WIDTH / 2, DISPLAY_TEXT_TOP);
       pop();
     }
   }
@@ -447,7 +509,51 @@ class Game {
 
   gameOver() {
     this.background.moving = false;
+    this.screenShown = "GameOver";
 
+    // play game over sound:
+    if (!gameOverSound.isPlaying() && !this.soundPlayed) {
+      gameOverSound.play();
+      this.soundPlayed = true;
+    }
+  }
+
+  victory() {
+    this.background.moving = false;
+    this.screenShown = "Victory";
+
+    // play victory sound:
+    if (!victorySound.isPlaying() && !this.soundPlayed) {
+      victorySound.play();
+      this.soundPlayed = true;
+    }
+  }
+
+  restartGame() {
+    this.background.moving = true;
+    this.soundPlayed = false;
+
+    // resetting stats:
+    this.player.energy = ENERGY;
+    this.player.safety = 0;
+    this.player.wearingHelmet = false;
+    this.player.quickDrawsOnHarness = 0;
+    this.player.granolaBarsEaten = 0;
+    currentLevel = 1;
+
+    // clearing obstacle arrays:
+    this.rocks = [];
+    this.safetyEquipment = [];
+    this.helmet = [];
+    this.granolaBar = [];
+    this.bolts = [];
+    this.quickDraw = [];
+
+    // clearing the screen:
+    this.screenShown = "";
+  }
+
+  gameOverScreen() {
     push();
     fill(169, 169, 169);
     rect(0, CANVAS_HEIGHT / 3, CANVAS_WIDTH, CANVAS_HEIGHT / 3);
@@ -480,17 +586,9 @@ class Game {
       CANVAS_HEIGHT / 2 + 100
     );
     pop();
-
-    // play game over sound:
-    if (!gameOverSound.isPlaying() && !this.soundPlayed) {
-      gameOverSound.play();
-      this.soundPlayed = true;
-    }
   }
 
-  victory() {
-    this.background.moving = false;
-
+  victoryScreen() {
     // show victory screen:
     push();
     fill(169, 169, 169);
@@ -524,33 +622,6 @@ class Game {
       (CANVAS_HEIGHT / 3) * 2.5 + 100
     );
     pop();
-
-    // play victory sound:
-    if (!victorySound.isPlaying() && !this.soundPlayed) {
-      victorySound.play();
-      this.soundPlayed = true;
-    }
-  }
-
-  restartGame() {
-    this.background.moving = true;
-    this.soundPlayed = false;
-
-    // resetting stats:
-    this.player.energy = ENERGY;
-    this.player.safety = 0;
-    this.player.wearingHelmet = false;
-    this.player.quickDrawsOnHarness = 0;
-    this.player.granolaBarsEaten = 0;
-    this.level = 1;
-
-    // clearing obstacle arrays:
-    this.rocks = [];
-    this.safetyEquipment = [];
-    this.helmet = [];
-    this.granolaBar = [];
-    this.bolts = [];
-    this.quickDraw = [];
   }
 
   startingScreen() {
@@ -584,6 +655,183 @@ class Game {
       "Press Enter to start the game",
       CANVAS_WIDTH / 2,
       CANVAS_HEIGHT / 2 + 100
+    );
+    pop();
+  }
+
+  screenLevel1() {
+    // create rect:
+    push();
+    fill(169, 169, 169);
+    rect(0, CANVAS_HEIGHT / 3, CANVAS_WIDTH, CANVAS_HEIGHT / 3);
+    pop();
+
+    // show name of level:
+    push();
+    textSize(30);
+    textAlign(CENTER, TOP);
+    text("Level 1 - Top Rope", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 115);
+    pop();
+
+    // show rules of level 1:
+    push();
+    textSize(18);
+    textAlign(CENTER, CENTER);
+    text(
+      "You start climbing top rope, which means your safety is always high.",
+      CANVAS_WIDTH / 2,
+      CANVAS_HEIGHT / 2 - 50
+    );
+    text(
+      "But beware the rocks, they will cost energy!",
+      CANVAS_WIDTH / 2,
+      CANVAS_HEIGHT / 2 - 30
+    );
+    text(
+      "So better avoid getting to tired in order to keep climbing!",
+      CANVAS_WIDTH / 2,
+      CANVAS_HEIGHT / 2 - 10
+    );
+    pop();
+
+    // show keys:
+    image(arrowLeftImg, CANVAS_WIDTH / 8, CANVAS_HEIGHT / 2 + 30, 60, 50);
+    image(
+      arrowRightImg,
+      (CANVAS_WIDTH / 8) * 1.8,
+      CANVAS_HEIGHT / 2 + 30,
+      60,
+      50
+    );
+
+    push();
+    textSize(24);
+    textAlign(CENTER, CENTER);
+    text("to move left/right", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 55);
+    pop();
+
+    // text to tart the game:
+    push();
+    textSize(14);
+    textAlign(CENTER, BOTTOM);
+    text(
+      "Press Enter to start climbing top rope",
+      CANVAS_WIDTH / 2,
+      CANVAS_HEIGHT / 2 + 120
+    );
+    pop();
+  }
+
+  // screenLevel2() {
+  //   push();
+  //   fill(169, 169, 169);
+  //   rect(0, CANVAS_HEIGHT / 3, CANVAS_WIDTH, CANVAS_HEIGHT / 3);
+  //   pop();
+
+  //   // show rules of level 1:
+  //   push();
+  //   textSize(60);
+  //   textAlign(CENTER, CENTER);
+  //   text("Level 2 - Lead Climbing", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 30);
+  //   pop();
+
+  //   push();
+  //   textSize(20);
+  //   textAlign(CENTER, CENTER);
+  //   text(
+  //     "Now that you've collected enough quickdraws, you can start testing your abilities in lead climbing!",
+  //     CANVAS_WIDTH / 2,
+  //     CANVAS_HEIGHT / 2 + 30
+  //   );
+
+  //   text(
+  //     "Place your quickdraws in the bolts.",
+  //     CANVAS_WIDTH / 2,
+  //     CANVAS_HEIGHT / 2 + 45
+  //   );
+  //   text(
+  //     "Missing a bolt means reducing your safety!",
+  //     CANVAS_WIDTH / 2,
+  //     CANVAS_HEIGHT / 2 + 60
+  //   );
+  //   pop();
+
+  //   // text to tart the game:
+  //   push();
+  //   textSize(14);
+  //   textAlign(CENTER, BOTTOM);
+  //   text(
+  //     "Press Enter to start lead climbing",
+  //     CANVAS_WIDTH / 2,
+  //     CANVAS_HEIGHT / 2 + 100
+  //   );
+  //   pop();
+  // }
+
+  screenLevel2() {
+    // create rect:
+    push();
+    fill(169, 169, 169);
+    rect(0, CANVAS_HEIGHT / 3, CANVAS_WIDTH, CANVAS_HEIGHT / 3);
+    pop();
+
+    // show name of level:
+    push();
+    textSize(30);
+    textAlign(CENTER, TOP);
+    text("Level 2 - Lead Climbing", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 115);
+    pop();
+
+    // show rules of level 1:
+    push();
+    textSize(18);
+    textAlign(CENTER, CENTER);
+    text(
+      "Now that you've collected enough quickdraws,",
+      CANVAS_WIDTH / 2,
+      CANVAS_HEIGHT / 2 - 50
+    );
+
+    text(
+      " you can start testing your abilities in lead climbing!",
+      CANVAS_WIDTH / 2,
+      CANVAS_HEIGHT / 2 - 30
+    );
+
+    text(
+      "Place quickdraws in the bolts to increase safety.",
+      CANVAS_WIDTH / 2,
+      CANVAS_HEIGHT / 2 - 10
+    );
+
+    text(
+      "Missing a bolt means reducing your safety!",
+      CANVAS_WIDTH / 2,
+      CANVAS_HEIGHT / 2 + 10
+    );
+    pop();
+
+    // show key:
+    image(spaceImg, CANVAS_WIDTH / 12, CANVAS_HEIGHT / 2 + 30, 240, 50);
+
+    push();
+    textSize(24);
+    textAlign(LEFT, CENTER);
+    text(
+      "to place quickdraw in bolt",
+      CANVAS_WIDTH / 2,
+      CANVAS_HEIGHT / 2 + 55
+    );
+    pop();
+
+    // text to tart the game:
+    push();
+    textSize(14);
+    textAlign(CENTER, BOTTOM);
+    text(
+      "Press Enter to start lead climbing",
+      CANVAS_WIDTH / 2,
+      CANVAS_HEIGHT / 2 + 120
     );
     pop();
   }
