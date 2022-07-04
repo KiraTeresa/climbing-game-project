@@ -1,6 +1,6 @@
 class Player {
   constructor() {
-    this.top = CANVAS_HEIGHT / 2 - 100;
+    this.top = CANVAS_HEIGHT / 2;
     this.left = CANVAS_WIDTH / 2 - 70;
     this.height = 180;
     this.width = 120;
