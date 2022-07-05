@@ -2,17 +2,20 @@ class Game {
   constructor() {
     this.background = new Background();
     this.player = new Player();
+    this.soundPlayed = false;
+    this.screenShown = "Start";
+    this.displays;
+    // this.topo = new Topo(); // disabled because it slows down the game to much
+
+    // randomized objects:
     this.rocks = [];
     this.safetyEquipment = [];
-    this.platforms = [];
-    this.platformPositionLeft = true;
+    // this.platforms = [];
+    // this.platformPositionLeft = true;
     this.helmet = [];
     this.granolaBar = [];
-    this.soundPlayed = false;
     this.bolts = [];
     this.quickDraw = [];
-    // this.topo = new Topo(); // disabled because it slows down the game to much
-    this.screenShown = "Start";
   }
 
   preload() {
@@ -21,11 +24,15 @@ class Game {
     // this.topo.preload();
 
     // Images of the obstacles:
-    rockImg = loadImage("./assets/a44g_3gj6_201006.png");
-    quickDrawImg = loadImage("./assets/quick-draw_415193651_adobe-stock.png");
-    platformImg = loadImage("./assets/Pad_3_3.png");
-    helmetImg = loadImage("./assets/helmet_vectorstock_22265240.png");
-    granolaBarImg = loadImage("./assets/free-granola-bars-icons-vector.png");
+    rockImg = loadImage("./assets/graphics/a44g_3gj6_201006.png");
+    quickDrawImg = loadImage(
+      "./assets/graphics/quick-draw_415193651_adobe-stock.png"
+    );
+    // platformImg = loadImage("./assets/Pad_3_3.png");
+    helmetImg = loadImage("./assets/graphics/helmet_vectorstock_22265240.png");
+    granolaBarImg = loadImage(
+      "./assets/graphics/free-granola-bars-icons-vector.png"
+    );
 
     // Images of the keys:
     arrowLeftImg = loadImage(
@@ -60,6 +67,7 @@ class Game {
     this.background.drawBackground();
     this.player.drawPlayer();
     // this.topo.drawTopo();
+    this.displayStats();
 
     if (
       this.player.energy > 0 &&
@@ -84,8 +92,8 @@ class Game {
     // Display energy and safety level of climber as well as the game level:
     this.displayEnergyLevel();
     this.displaySafetyLevel();
-    this.displayLevel();
-    this.displayNumOfQuickdrawsOnHarness();
+    // this.displayLevel();
+    // this.displayNumOfQuickdrawsOnHarness();
 
     // Show starting screen:
     // if (
@@ -96,26 +104,8 @@ class Game {
     //   this.startingScreen();
     // }
 
-    switch (this.screenShown) {
-      case "Start":
-        this.startingScreen();
-        break;
-      case "Level1":
-        this.screenLevel1();
-        break;
-      case "Level2":
-        this.screenLevel2();
-        break;
-      case "GameOver":
-        this.gameOverScreen();
-        break;
-      case "Victory":
-        this.victoryScreen();
-        break;
-      // default:
-      //   this.startingScreen();
-      //   break;
-    }
+    // Shows level instructions or starting-/gameover-/victory screen:
+    this.showScreen();
   }
 
   keyPressed() {
@@ -379,49 +369,49 @@ class Game {
   }
 
   displayEnergyLevel() {
-    // create red rect:
-    push();
-    fill("#C30E0E");
-    rect(0, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-    pop();
+    // // create red rect:
+    // push();
+    // fill("#C30E0E");
+    // rect(0, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+    // pop();
 
-    // create green rect:
-    push();
-    fill("SeaGreen");
-    rect(
-      0,
-      DISPLAY_TOP,
-      (DISPLAY_WIDTH / ENERGY) * this.player.energy,
-      DISPLAY_HEIGHT
-    ); // rect(x, y, w, h, top-left radius, tr radius, br radius, bl radius)
-    pop();
+    // // create green rect:
+    // push();
+    // fill("SeaGreen");
+    // rect(
+    //   0,
+    //   DISPLAY_TOP,
+    //   (DISPLAY_WIDTH / ENERGY) * this.player.energy,
+    //   DISPLAY_HEIGHT
+    // ); // rect(x, y, w, h, top-left radius, tr radius, br radius, bl radius)
+    // pop();
 
     // set text with current energy level:
     if (this.player.energy > 0) {
-      textSize(16);
-      textAlign(CENTER, CENTER);
-      text(`Energy: ${this.player.energy}`, DISPLAY_TEXT_X, DISPLAY_TEXT_Y);
+      // textSize(16);
+      // textAlign(CENTER, CENTER);
+      // text(`Energy: ${this.player.energy}`, DISPLAY_TEXT_X, DISPLAY_TEXT_Y);
     }
 
     // show game over screen when no more energy left:
     else {
-      push();
-      textSize(15);
-      textAlign(CENTER, CENTER);
-      text(`Too tired`, DISPLAY_TEXT_X, DISPLAY_TEXT_Y);
-      pop();
+      // push();
+      // textSize(15);
+      // textAlign(CENTER, CENTER);
+      // text(`Too tired`, DISPLAY_TEXT_X, DISPLAY_TEXT_Y);
+      // pop();
       this.gameOver();
     }
   }
 
   displaySafetyLevel() {
-    // create rect:
-    rect(DISPLAY_WIDTH, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+    // // create rect:
+    // rect(DISPLAY_WIDTH, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
 
-    // set text with current safety level:
-    textSize(16);
-    textAlign(CENTER, CENTER);
-    text(`Safety: ${this.player.safety}`, DISPLAY_WIDTH * 1.5, DISPLAY_TEXT_Y);
+    // // set text with current safety level:
+    // textSize(16);
+    // textAlign(CENTER, CENTER);
+    // text(`Safety: ${this.player.safety}`, DISPLAY_WIDTH * 1.5, DISPLAY_TEXT_Y);
 
     // Ensure safety cannot be less than zero:
     if (this.player.safety < 0) {
@@ -450,68 +440,77 @@ class Game {
     }
   }
 
-  displayNumOfQuickdrawsOnHarness() {
-    // create rect:
-    if (
-      currentLevel === 1 &&
-      this.player.quickDrawsOnHarness >= NUM_QUICKDRAWS
-    ) {
-      push();
-      fill("SeaGreen");
-      rect(DISPLAY_WIDTH * 2, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-      pop();
-    } else if (currentLevel === 2) {
-      if (this.player.quickDrawsOnHarness > 0) {
-        push();
-        fill("SeaGreen");
-        rect(DISPLAY_WIDTH * 2, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-        pop();
-      } else {
-        push();
-        fill("#C30E0E");
-        rect(DISPLAY_WIDTH * 2, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-        pop();
-      }
-    } else {
-      rect(DISPLAY_WIDTH * 2, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-    }
+  // displayNumOfQuickdrawsOnHarness() {
+  //   // create rect:
+  //   if (
+  //     currentLevel === 1 &&
+  //     this.player.quickDrawsOnHarness >= NUM_QUICKDRAWS
+  //   ) {
+  //     push();
+  //     fill("SeaGreen");
+  //     rect(DISPLAY_WIDTH * 2, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+  //     pop();
+  //   } else if (currentLevel === 2) {
+  //     if (this.player.quickDrawsOnHarness > 0) {
+  //       push();
+  //       fill("SeaGreen");
+  //       rect(DISPLAY_WIDTH * 2, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+  //       pop();
+  //     } else {
+  //       push();
+  //       fill("#C30E0E");
+  //       rect(DISPLAY_WIDTH * 2, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+  //       pop();
+  //     }
+  //   } else {
+  //     rect(DISPLAY_WIDTH * 2, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+  //   }
 
-    // set text with number of quickdraws on harness:
-    textSize(16);
-    textAlign(CENTER, CENTER);
-    text(
-      `Quickdraws: ${this.player.quickDrawsOnHarness}`,
-      DISPLAY_WIDTH * 2.5,
-      DISPLAY_TEXT_Y
+  //   // set text with number of quickdraws on harness:
+  //   textSize(16);
+  //   textAlign(CENTER, CENTER);
+  //   text(
+  //     `Quickdraws: ${this.player.quickDrawsOnHarness}`,
+  //     DISPLAY_WIDTH * 2.5,
+  //     DISPLAY_TEXT_Y
+  //   );
+  // }
+
+  // displayLevel() {
+  //   // create rect:
+  //   rect(DISPLAY_WIDTH * 3, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+
+  //   // set text with current level:
+  //   // if (currentLevel === 1) {
+  //   //   push();
+  //   //   textSize(16);
+  //   //   textStyle(BOLD);
+  //   //   fill(0, 102, 153);
+  //   //   text(`Level: ${currentLevel}`, DISPLAY_WIDTH * 3.5, DISPLAY_TEXT_Y);
+  //   //   pop();
+  //   // } else if (currentLevel === 2) {
+  //   //   push();
+  //   //   textSize(16);
+  //   //   textStyle(BOLD);
+  //   //   fill(205, 92, 92);
+  //   //   text(`Level: ${currentLevel}`, DISPLAY_WIDTH * 3.5, DISPLAY_TEXT_Y);
+  //   //   pop();
+  //   // } else {
+  //   push();
+  //   textSize(16);
+  //   textStyle(BOLD);
+  //   text(`Level: ${currentLevel}`, DISPLAY_WIDTH * 3.5, DISPLAY_TEXT_Y);
+  //   pop();
+  //   // }
+  // }
+
+  displayStats() {
+    this.displays = new Stats(
+      this.player.energy,
+      this.player.safety,
+      this.player.quickDrawsOnHarness
     );
-  }
-
-  displayLevel() {
-    // create rect:
-    rect(DISPLAY_WIDTH * 3, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-
-    // set text with current level:
-    // if (currentLevel === 1) {
-    //   push();
-    //   textSize(16);
-    //   textStyle(BOLD);
-    //   fill(0, 102, 153);
-    //   text(`Level: ${currentLevel}`, DISPLAY_WIDTH * 3.5, DISPLAY_TEXT_Y);
-    //   pop();
-    // } else if (currentLevel === 2) {
-    //   push();
-    //   textSize(16);
-    //   textStyle(BOLD);
-    //   fill(205, 92, 92);
-    //   text(`Level: ${currentLevel}`, DISPLAY_WIDTH * 3.5, DISPLAY_TEXT_Y);
-    //   pop();
-    // } else {
-    push();
-    textSize(16);
-    textStyle(BOLD);
-    text(`Level: ${currentLevel}`, DISPLAY_WIDTH * 3.5, DISPLAY_TEXT_Y);
-    pop();
-    // }
+    this.displays.drawStats();
   }
 
   removeFromArr(arr, obstacle) {
@@ -799,5 +798,28 @@ class Game {
       CANVAS_HEIGHT / 2 + 120
     );
     pop();
+  }
+
+  showScreen() {
+    switch (this.screenShown) {
+      case "Start":
+        this.startingScreen();
+        break;
+      case "Level1":
+        this.screenLevel1();
+        break;
+      case "Level2":
+        this.screenLevel2();
+        break;
+      case "GameOver":
+        this.gameOverScreen();
+        break;
+      case "Victory":
+        this.victoryScreen();
+        break;
+      // default:
+      //   this.startingScreen();
+      //   break;
+    }
   }
 }

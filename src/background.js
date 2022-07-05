@@ -5,7 +5,9 @@ class Background {
   }
 
   preload() {
-    this.img = loadImage("./assets/mitchell-luo-i1O_Hr6cbWc-unsplash.jpg");
+    this.img = loadImage(
+      "./assets/graphics/mitchell-luo-i1O_Hr6cbWc-unsplash.jpg"
+    );
   }
 
   drawBackground() {

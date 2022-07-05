@@ -35,7 +35,7 @@ class Player {
 
   preload() {
     this.img = loadImage(
-      "./assets/vecteezy_indoor-rock-climbing-gym_7095122.png"
+      "./assets/graphics/vecteezy_indoor-rock-climbing-gym_7095122.png"
     );
   }
 
