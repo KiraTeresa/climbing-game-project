@@ -185,14 +185,9 @@ class Game {
         !this.player.wearingHelmet
       ) {
         rockSound.play();
-        this.player.timesHit++;
         this.player.energy -= 5;
         rock.hitClimber = true;
-        // this.player.gotHit = true;
-        // this.player.flickering = true;
-        // this.player.frameCountAtHit = frameCount;
-        console.log(this.player.timesHit);
-        this.player.boomChakalaka();
+        this.player.recoverFromHit();
       }
       // action on collision while wearing a helmet:
       else if (

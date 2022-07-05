@@ -1,31 +1,29 @@
 class Player {
   constructor() {
+    // setting position and size of player:
     this.top = CANVAS_HEIGHT / 2;
     this.left = CANVAS_WIDTH / 2 - 70;
     this.height = 180;
     this.width = 120;
-    this.timesHit = 0;
+    // variables affecting stats displays:
     this.safety = 0;
     this.energy = ENERGY;
-    // this.gotHit = false;
-    // this.flickering = false;
-    // this.frameCountAtHit = 0;
-    this.shotTime = 0;
-    this.isTransparent = false;
-    this.canGetHit = true;
     this.wearingHelmet = false;
     this.quickDrawsOnHarness = 0;
     this.granolaBarsEaten = 0;
+    // variables for flickering at hit:
+    this.frameCountAtHit = 0;
+    this.isTransparent = false;
+    this.canGetHit = true;
   }
 
-  boomChakalaka() {
+  recoverFromHit() {
     this.canGetHit = false;
-    this.shotTime = frameCount;
+    this.frameCountAtHit = frameCount;
   }
 
   drawImage() {
     image(this.img, this.left, this.top, this.width, this.height);
-    //  this.canGetHit = true;
   }
 
   semiTransparentDrawing() {
@@ -46,14 +44,14 @@ class Player {
   // }
 
   isTimeToGoBackToNormal() {
-    // if this.shotTime === 0
+    // if this.frameCountAtHit === 0
     // if there hasnt been any coliision yet, or if we say that we can collide again
-    if (!this.shotTime) {
+    if (!this.frameCountAtHit) {
       return false;
     }
-    // this defines wether it has been 180 frames (3 seconds) since we got hit in the head by a rock
-    const isTime = this.shotTime + 180 <= frameCount;
-    // if it has been 3 seconds, we now need to let the player know that it can get hit once more
+    // this defines wether it has been 120 frames (2 seconds) since we got hit in the head by a rock
+    const isTime = this.frameCountAtHit + 120 <= frameCount;
+    // if it has been 2 seconds, we now need to let the player know that it can get hit once more
     if (isTime) {
       this.canGetHit = true;
     }
@@ -66,13 +64,12 @@ class Player {
     }
 
     // From this point, youve taken a rock to the head
-
     if (this.isTransparent) {
       this.semiTransparentDrawing();
     } else {
       this.drawImage();
     }
-    if (frameCount % 30 === 0) {
+    if (frameCount % 15 === 0) {
       this.isTransparent = !this.isTransparent;
     }
   }
