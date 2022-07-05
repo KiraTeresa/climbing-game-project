@@ -21,13 +21,13 @@ const DISPLAY_TEXT_Y = DISPLAY_HEIGHT / 2;
 const DISPLAY_TEXT_X = DISPLAY_WIDTH / 2;
 
 // starting energy level of player:
-const ENERGY = 50;
+const ENERGY = 10;
 
 // number of quickdraws to be collected in level 1:
 const NUM_QUICKDRAWS = 4;
 
 // safety level to be reached in level 2:
-const SAFETY = 10;
+const SAFETY = 8;
 
 // general values for moving obstacles and background:
 const GRAVITY = 0.1;
@@ -48,6 +48,6 @@ let victorySound;
 let gameOverSound;
 
 // variable which stores current level:
-let currentLevel = 0;
+// let currentLevel = 0;
 
-let platformCount = 0;
+// let platformCount = 0;

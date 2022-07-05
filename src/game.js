@@ -5,6 +5,7 @@ class Game {
     this.soundPlayed = false;
     this.screenShown = "Start";
     this.displays;
+    this.currentLevel = 0;
     // this.topo = new Topo(); // disabled because it slows down the game to much
 
     // randomized objects:
@@ -69,62 +70,46 @@ class Game {
     // this.topo.drawTopo();
     this.displayStats();
 
-    if (
-      this.player.energy > 0 &&
-      this.player.safety < SAFETY &&
-      this.background.moving
-    ) {
-      // Objects randomly falling from mountain top:
-      this.rocksFalling();
-      this.safetyEquipmentFalling();
-      this.helmetFalling();
-      this.granolaBarFalling();
-      // Platforms appear every now and then:
-      // this.platformAppearing();
+    this.fallingObjects();
 
-      // Bolts will be added when player reaches level 2:
-      if (currentLevel === 2) {
-        // Bolts showing:
-        this.boltsShowing();
-      }
+    // Ensure safety cannot be less than zero:
+    if (this.player.safety < 0) {
+      this.player.safety = 0;
     }
 
+    this.nextLevel();
+    this.endGame();
+
     // Display energy and safety level of climber as well as the game level:
-    this.displayEnergyLevel();
-    this.displaySafetyLevel();
+    // this.displayEnergyLevel();
+    // this.displaySafetyLevel();
     // this.displayLevel();
     // this.displayNumOfQuickdrawsOnHarness();
 
-    // Show starting screen:
-    // if (
-    //   this.player.energy > 0 &&
-    //   this.player.safety < SAFETY &&
-    //   !this.background.moving
-    // ) {
-    //   this.startingScreen();
-    // }
-
     // Shows level instructions or starting-/gameover-/victory screen:
     this.showScreen();
+    if (this.screenShown) {
+      console.log(this.screenShown);
+    }
   }
 
   keyPressed() {
     this.player.keyPressed();
-    if (keyCode === ENTER && !this.background.moving) {
+    if (keyCode === ENTER && this.screenShown) {
       if (
         this.screenShown === "Start" ||
         this.screenShown === "GameOver" ||
         this.screenShown === "Victory"
       ) {
         this.screenShown = "Level1";
-        currentLevel = 1;
+        this.currentLevel = 1;
       } else if (this.screenShown === "Level1") {
         // start level 1
         this.restartGame();
       } else if (this.screenShown === "Level2") {
         // start level 2
         this.background.moving = true;
-        currentLevel = 2;
+        this.currentLevel = 2;
         this.player.granolaBarsEaten = 0;
         this.screenShown = "";
       }
@@ -151,6 +136,28 @@ class Game {
       playerRight > obstacleLeft &&
       player.canGetHit
     );
+  }
+
+  fallingObjects() {
+    if (
+      this.player.energy > 0 &&
+      this.player.safety < SAFETY &&
+      this.background.moving
+    ) {
+      // Objects randomly falling from mountain top:
+      this.rocksFalling();
+      this.safetyEquipmentFalling();
+      this.helmetFalling();
+      this.granolaBarFalling();
+      // Platforms appear every now and then:
+      // this.platformAppearing();
+
+      // Bolts will be added when player reaches level 2:
+      if (this.currentLevel === 2) {
+        // Bolts showing:
+        this.boltsShowing();
+      }
+    }
   }
 
   rocksFalling() {
@@ -211,7 +218,7 @@ class Game {
         console.log(this.quickDraw);
 
         // collecting quickdraws only increases player safety when in level 1:
-        if (currentLevel === 1) {
+        if (this.currentLevel === 1) {
           this.player.safety++;
         }
 
@@ -254,8 +261,6 @@ class Game {
         this.player.safety += 2; // safety increases while wearing a helmet
       }
     });
-
-    console.log("Is wearing helmet: ", this.player.wearingHelmet);
   }
 
   granolaBarFalling() {
@@ -368,75 +373,61 @@ class Game {
     );
   }
 
-  displayEnergyLevel() {
-    // // create red rect:
-    // push();
-    // fill("#C30E0E");
-    // rect(0, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-    // pop();
+  // displayEnergyLevel() {
+  //   // // create red rect:
+  //   // push();
+  //   // fill("#C30E0E");
+  //   // rect(0, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+  //   // pop();
 
-    // // create green rect:
-    // push();
-    // fill("SeaGreen");
-    // rect(
-    //   0,
-    //   DISPLAY_TOP,
-    //   (DISPLAY_WIDTH / ENERGY) * this.player.energy,
-    //   DISPLAY_HEIGHT
-    // ); // rect(x, y, w, h, top-left radius, tr radius, br radius, bl radius)
-    // pop();
+  //   // // create green rect:
+  //   // push();
+  //   // fill("SeaGreen");
+  //   // rect(
+  //   //   0,
+  //   //   DISPLAY_TOP,
+  //   //   (DISPLAY_WIDTH / ENERGY) * this.player.energy,
+  //   //   DISPLAY_HEIGHT
+  //   // ); // rect(x, y, w, h, top-left radius, tr radius, br radius, bl radius)
+  //   // pop();
 
-    // set text with current energy level:
-    if (this.player.energy > 0) {
-      // textSize(16);
-      // textAlign(CENTER, CENTER);
-      // text(`Energy: ${this.player.energy}`, DISPLAY_TEXT_X, DISPLAY_TEXT_Y);
-    }
+  //   // set text with current energy level:
+  //   if (this.player.energy > 0) {
+  //     // textSize(16);
+  //     // textAlign(CENTER, CENTER);
+  //     // text(`Energy: ${this.player.energy}`, DISPLAY_TEXT_X, DISPLAY_TEXT_Y);
+  //   }
 
-    // show game over screen when no more energy left:
-    else {
-      // push();
-      // textSize(15);
-      // textAlign(CENTER, CENTER);
-      // text(`Too tired`, DISPLAY_TEXT_X, DISPLAY_TEXT_Y);
-      // pop();
-      this.gameOver();
-    }
-  }
+  //   // show game over screen when no more energy left:
+  //   else {
+  //     // push();
+  //     // textSize(15);
+  //     // textAlign(CENTER, CENTER);
+  //     // text(`Too tired`, DISPLAY_TEXT_X, DISPLAY_TEXT_Y);
+  //     // pop();
+  //     this.gameOver();
+  //   }
+  // }
 
-  displaySafetyLevel() {
-    // // create rect:
-    // rect(DISPLAY_WIDTH, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+  // displaySafetyLevel() {
+  //   // // create rect:
+  //   // rect(DISPLAY_WIDTH, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
 
-    // // set text with current safety level:
-    // textSize(16);
-    // textAlign(CENTER, CENTER);
-    // text(`Safety: ${this.player.safety}`, DISPLAY_WIDTH * 1.5, DISPLAY_TEXT_Y);
+  //   // // set text with current safety level:
+  //   // textSize(16);
+  //   // textAlign(CENTER, CENTER);
+  //   // text(`Safety: ${this.player.safety}`, DISPLAY_WIDTH * 1.5, DISPLAY_TEXT_Y);
 
-    // Ensure safety cannot be less than zero:
-    if (this.player.safety < 0) {
-      this.player.safety = 0;
-    }
+  // }
 
-    // Move up to next level:
+  nextLevel() {
     if (
-      currentLevel === 1 &&
+      this.currentLevel === 1 &&
       this.player.quickDrawsOnHarness >= NUM_QUICKDRAWS &&
       this.player.wearingHelmet
     ) {
       this.background.moving = false;
       this.screenShown = "Level2";
-      // currentLevel = 2;
-      // this.player.granolaBarsEaten = 0;
-    }
-
-    // show victory screen when player reached certain level of safety:
-    if (currentLevel === 2) {
-      if (this.player.safety >= SAFETY) {
-        this.victory();
-      } else if (this.player.safety === 0) {
-        this.gameOver();
-      }
     }
   }
 
@@ -508,7 +499,8 @@ class Game {
     this.displays = new Stats(
       this.player.energy,
       this.player.safety,
-      this.player.quickDrawsOnHarness
+      this.player.quickDrawsOnHarness,
+      this.currentLevel
     );
     this.displays.drawStats();
   }
@@ -539,6 +531,20 @@ class Game {
     }
   }
 
+  endGame() {
+    if (this.background.moving) {
+      if (this.player.energy <= 0) {
+        this.gameOver();
+      } else if (this.currentLevel === 2) {
+        if (this.player.safety >= SAFETY) {
+          this.victory();
+        } else if (this.player.safety === 0) {
+          this.gameOver();
+        }
+      }
+    }
+  }
+
   restartGame() {
     this.background.moving = true;
     this.soundPlayed = false;
@@ -549,7 +555,7 @@ class Game {
     this.player.wearingHelmet = false;
     this.player.quickDrawsOnHarness = 0;
     this.player.granolaBarsEaten = 0;
-    currentLevel = 1;
+    this.currentLevel = 1;
 
     // clearing obstacle arrays:
     this.rocks = [];
@@ -657,7 +663,7 @@ class Game {
     );
     pop();
 
-    // text to tart the game:
+    // text to start the game:
     push();
     textSize(14);
     textAlign(CENTER, BOTTOM);

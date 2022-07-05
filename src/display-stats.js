@@ -1,5 +1,5 @@
 class Stats {
-  constructor(energy, safety, quickdraws) {
+  constructor(energy, safety, quickdraws, currentLevel) {
     this.top = 0;
     this.width = CANVAS_WIDTH / 4;
     this.height = 30;
@@ -7,6 +7,7 @@ class Stats {
     this.energy = energy;
     this.safety = safety;
     this.quickdraws = quickdraws;
+    this.currentLevel = currentLevel;
   }
 
   drawStats() {
@@ -59,9 +60,9 @@ class Stats {
   quickdrawsDisplay() {
     // rect:
     const left = this.width * 2;
-    if (currentLevel === 1 && this.quickdraws >= NUM_QUICKDRAWS) {
+    if (this.currentLevel === 1 && this.quickdraws >= NUM_QUICKDRAWS) {
       this.createRect(left, "SeaGreen", this.width);
-    } else if (currentLevel === 2) {
+    } else if (this.currentLevel === 2) {
       if (this.quickdraws > 0) {
         this.createRect(left, "SeaGreen", this.width);
       } else {
@@ -79,6 +80,6 @@ class Stats {
     const left = this.width * 3;
     this.createRect(left, "", this.width);
     // text:
-    this.createText("Level", currentLevel, this.width * 3.5);
+    this.createText("Level", this.currentLevel, this.width * 3.5);
   }
 }
