@@ -54,7 +54,11 @@ class Stats {
     const left = this.width;
     this.createRect(left, "", this.width);
     // text:
-    this.createText("Safety", this.safety, this.width * 1.5);
+    if (this.currentLevel === 2) {
+      this.createText("Safety", `${this.safety}/${SAFETY}`, this.width * 1.5);
+    } else {
+      this.createText("Safety", this.safety, this.width * 1.5);
+    }
   }
 
   quickdrawsDisplay() {
@@ -72,7 +76,15 @@ class Stats {
       this.createRect(left, "", this.width);
     }
     // text:
-    this.createText("Quickdraws", this.quickdraws, this.width * 2.5);
+    if (this.currentLevel === 1) {
+      this.createText(
+        "Quickdraws",
+        `${this.quickdraws}/${NUM_QUICKDRAWS}`,
+        this.width * 2.5
+      );
+    } else {
+      this.createText("Quickdraws", this.quickdraws, this.width * 2.5);
+    }
   }
 
   levelDisplay() {

@@ -24,7 +24,7 @@ class Game {
     this.player.preload();
     // this.topo.preload();
 
-    // Images of the obstacles:
+    // Images:
     rockImg = loadImage("./assets/graphics/a44g_3gj6_201006.png");
     quickDrawImg = loadImage(
       "./assets/graphics/quick-draw_415193651_adobe-stock.png"
@@ -34,8 +34,12 @@ class Game {
     granolaBarImg = loadImage(
       "./assets/graphics/free-granola-bars-icons-vector.png"
     );
-
-    // Images of the keys:
+    startImg = loadImage(
+      "./assets/graphics/massimiliano-morosinotto-3i5PHVp1Fkw-unsplash.jpg"
+    );
+    victoryImg = loadImage(
+      "./assets/graphics/jody-confer-EIyu-OL-cFA-unsplash.jpg"
+    );
     arrowLeftImg = loadImage(
       "./assets/graphics/vecteezy_keyboard-keys-with-flat-design-style_arrow-left.png"
     );
@@ -103,7 +107,7 @@ class Game {
         this.screenShown === "Victory"
       ) {
         this.screenShown = "Level1";
-        this.currentLevel = 1;
+        this.resettingStats();
       } else if (this.screenShown === "Level1") {
         // start level 1
         this.restartGame();
@@ -536,10 +540,7 @@ class Game {
     }
   }
 
-  restartGame() {
-    this.background.moving = true;
-    this.soundPlayed = false;
-
+  resettingStats() {
     // resetting stats:
     this.player.energy = ENERGY;
     this.player.safety = 0;
@@ -547,6 +548,19 @@ class Game {
     this.player.quickDrawsOnHarness = 0;
     this.player.granolaBarsEaten = 0;
     this.currentLevel = 1;
+  }
+
+  restartGame() {
+    this.background.moving = true;
+    this.soundPlayed = false;
+
+    // // resetting stats:
+    // this.player.energy = ENERGY;
+    // this.player.safety = 0;
+    // this.player.wearingHelmet = false;
+    // this.player.quickDrawsOnHarness = 0;
+    // this.player.granolaBarsEaten = 0;
+    // this.currentLevel = 1;
 
     // clearing obstacle arrays:
     this.rocks = [];

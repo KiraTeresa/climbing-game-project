@@ -33,12 +33,14 @@ const SAFETY = 8;
 const GRAVITY = 0.1;
 const BACKGROUND_SPEED = 2;
 
-// images of objects:
+// images:
 let rockImg;
 let quickDrawImg;
 let platformImg;
 let helmetImg;
 let granolaBarImg;
+let startImg;
+let victoryImg;
 
 // sounds:
 let rockSound;
