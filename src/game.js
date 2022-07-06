@@ -145,7 +145,6 @@ class Game {
       this.player.safety < SAFETY &&
       this.background.moving
     ) {
-      // Objects randomly falling from mountain top:
       this.rocksFalling();
       this.safetyEquipmentFalling();
       this.helmetFalling();
@@ -155,7 +154,6 @@ class Game {
 
       // Bolts will be added when player reaches level 2:
       if (this.currentLevel === 2) {
-        // Bolts showing:
         this.boltsShowing();
       }
     }
@@ -216,7 +214,6 @@ class Game {
         safetyEquipmentSound.play();
         this.removeFromArr(this.safetyEquipment, item);
         this.quickDraw.push(new SafetyEquipment(quickDrawImg));
-        console.log(this.quickDraw);
 
         // collecting quickdraws only increases player safety when in level 1:
         if (this.currentLevel === 1) {
@@ -225,7 +222,6 @@ class Game {
 
         // Keep count of how many quick draws are on the harness:
         this.player.quickDrawsOnHarness++;
-        console.log("Qick Draws collected: ", this.player.quickDrawsOnHarness);
       }
 
       if (this.safetyEquipment.top >= CANVAS_HEIGHT) {
@@ -289,39 +285,39 @@ class Game {
     });
   }
 
-  platformAppearing() {
-    // Create new platform every 6 seconds
-    if (frameCount % 300 === 0) {
-      this.platforms.push(
-        new Platform(platformImg, helmetImg, this.platformPositionLeft)
-      );
-      this.platformPositionLeft = !this.platformPositionLeft;
-      platformCount++;
-      console.log("PlatformCount: ", platformCount);
-    }
+  // platformAppearing() {
+  //   // Create new platform every 6 seconds
+  //   if (frameCount % 300 === 0) {
+  //     this.platforms.push(
+  //       new Platform(platformImg, helmetImg, this.platformPositionLeft)
+  //     );
+  //     this.platformPositionLeft = !this.platformPositionLeft;
+  //     platformCount++;
+  //     console.log("PlatformCount: ", platformCount);
+  //   }
 
-    this.platforms.forEach((platform) => {
-      // draw every element of the platform array
-      platform.drawPlatform();
+  //   this.platforms.forEach((platform) => {
+  //     // draw every element of the platform array
+  //     platform.drawPlatform();
 
-      // remove all platform elements which have left the canvas
-      if (platform.top > CANVAS_HEIGHT) {
-        this.removeFromArr(this.platforms, platform);
-      }
+  //     // remove all platform elements which have left the canvas
+  //     if (platform.top > CANVAS_HEIGHT) {
+  //       this.removeFromArr(this.platforms, platform);
+  //     }
 
-      // Collision check with platform:
-      if (
-        this.isColliding(this.player, platform) &&
-        !platform.hitClimber &&
-        !platform.platformHasHelmet
-      ) {
-        this.player.energy -= 10;
-        platform.hitClimber = true;
-        this.player.boomChakalaka();
-      }
-      //
-    });
-  }
+  //     // Collision check with platform:
+  //     if (
+  //       this.isColliding(this.player, platform) &&
+  //       !platform.hitClimber &&
+  //       !platform.platformHasHelmet
+  //     ) {
+  //       this.player.energy -= 10;
+  //       platform.hitClimber = true;
+  //       this.player.boomChakalaka();
+  //     }
+  //     //
+  //   });
+  // }
 
   boltsShowing() {
     if (frameCount % 180 === 0) {
@@ -338,7 +334,6 @@ class Game {
         if (bolt.hasQuickDraw === false && this.player.safety > 0) {
           this.player.safety--;
         }
-
         this.removeFromArr(this.bolts, bolt);
       }
 
@@ -367,11 +362,6 @@ class Game {
 
     // Safety goes up when quickdraw was placed in bolt:
     this.player.safety++;
-
-    console.log(
-      "Qick Draws after placement: ",
-      this.player.quickDrawsOnHarness
-    );
   }
 
   // displayEnergyLevel() {

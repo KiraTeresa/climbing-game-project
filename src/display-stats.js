@@ -40,7 +40,7 @@ class Stats {
     // rect:
     const left = 0;
     this.createRect(left, "#C30E0E", this.width); // red rect
-    this.createRect(left, "SeaGreen", (DISPLAY_WIDTH / ENERGY) * this.energy); // green rect
+    this.createRect(left, "SeaGreen", (this.width / ENERGY) * this.energy); // green rect
     // text:
     if (this.energy > 0) {
       this.createText("Energy", this.energy, this.width * 0.5);

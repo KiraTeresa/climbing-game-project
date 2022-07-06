@@ -26,11 +26,64 @@ class Screen {
     }
   }
 
-  startingScreen() {
+  createRect(top) {
     push();
     fill(169, 169, 169);
-    rect(0, CANVAS_HEIGHT / 3, CANVAS_WIDTH, CANVAS_HEIGHT / 3);
+    rect(0, top, CANVAS_WIDTH, CANVAS_HEIGHT / 3);
     pop();
+  }
+
+  createLevelHeader(headerText) {
+    // Level header:
+    push();
+    textSize(30);
+    textAlign(CENTER, TOP);
+    text(headerText, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 115);
+    pop();
+  }
+
+  createLevelRules(line1, line2, line3, line4) {
+    // level rules:
+    push();
+    textSize(18);
+    textAlign(CENTER, CENTER);
+    text(line1, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 50);
+    text(line2, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 30);
+    text(line3, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 10);
+    text(line4, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 10);
+    pop();
+  }
+
+  keysToUse(img1, img2, decribeFunction) {
+    let textLeft;
+
+    if (img2) {
+      image(img1, CANVAS_WIDTH / 8, CANVAS_HEIGHT / 2 + 30, 60, 50);
+      image(img2, (CANVAS_WIDTH / 8) * 1.8, CANVAS_HEIGHT / 2 + 30, 60, 50);
+      textLeft = CENTER;
+    } else {
+      image(img1, CANVAS_WIDTH / 12, CANVAS_HEIGHT / 2 + 30, 240, 50);
+      textLeft = LEFT;
+    }
+
+    push();
+    textSize(24);
+    textAlign(textLeft, CENTER);
+    text(decribeFunction, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 55);
+    pop();
+  }
+
+  reStartText(someText) {
+    push();
+    textSize(14);
+    textAlign(CENTER, BOTTOM);
+    text(someText, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 120);
+    pop();
+  }
+
+  startingScreen() {
+    // rect:
+    this.createRect(CANVAS_HEIGHT / 3);
 
     // show welcome message:
     push();
@@ -39,164 +92,189 @@ class Screen {
     text("Ready to climb?", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 30);
     pop();
 
-    push();
-    textSize(20);
-    textAlign(CENTER, CENTER);
-    text(
-      "Look at the Topo for the rules of the game",
-      CANVAS_WIDTH / 2,
-      CANVAS_HEIGHT / 2 + 30
-    );
-    pop();
+    // push();
+    // textSize(20);
+    // textAlign(CENTER, CENTER);
+    // text(
+    //   "Look at the Topo for the rules of the game",
+    //   CANVAS_WIDTH / 2,
+    //   CANVAS_HEIGHT / 2 + 30
+    // );
+    // pop();
 
     // text to start the game:
-    push();
-    textSize(14);
-    textAlign(CENTER, BOTTOM);
-    text(
-      "Press Enter to start the game",
-      CANVAS_WIDTH / 2,
-      CANVAS_HEIGHT / 2 + 100
-    );
-    pop();
+    this.reStartText("Press Enter to start the game");
+    // push();
+    // textSize(14);
+    // textAlign(CENTER, BOTTOM);
+    // text(
+    //   "Press Enter to start the game",
+    //   CANVAS_WIDTH / 2,
+    //   CANVAS_HEIGHT / 2 + 100
+    // );
+    // pop();
   }
 
   screenLevel1() {
-    // create rect:
-    push();
-    fill(169, 169, 169);
-    rect(0, CANVAS_HEIGHT / 3, CANVAS_WIDTH, CANVAS_HEIGHT / 3);
-    pop();
+    // rect:
+    this.createRect(CANVAS_HEIGHT / 3);
 
-    // show name of level:
-    push();
-    textSize(30);
-    textAlign(CENTER, TOP);
-    text("Level 1 - Top Rope", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 115);
-    pop();
+    // header text:
+    this.createLevelHeader("Level 1 - Top Rope");
 
     // show rules of level 1:
-    push();
-    textSize(18);
-    textAlign(CENTER, CENTER);
-    text(
+    this.createLevelRules(
       "You start climbing top rope, which means your safety is always high.",
-      CANVAS_WIDTH / 2,
-      CANVAS_HEIGHT / 2 - 50
-    );
-    text(
       "But beware the rocks, they will cost energy!",
-      CANVAS_WIDTH / 2,
-      CANVAS_HEIGHT / 2 - 30
-    );
-    text(
       "So better avoid getting to tired in order to keep climbing!",
-      CANVAS_WIDTH / 2,
-      CANVAS_HEIGHT / 2 - 10
+      ""
     );
-    pop();
+
+    // important keys in level 1:
+    this.keysToUse(arrowLeftImg, arrowRightImg, "to move left/right");
+
+    // text to start level 1:
+    this.reStartText("Press Enter to start climbing top rope");
+    // show name of level:
+    // push();
+    // textSize(30);
+    // textAlign(CENTER, TOP);
+    // text("Level 1 - Top Rope", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 115);
+    // pop();
+
+    // show rules of level 1:
+    // push();
+    // textSize(18);
+    // textAlign(CENTER, CENTER);
+    // text(
+    //   "You start climbing top rope, which means your safety is always high.",
+    //   CANVAS_WIDTH / 2,
+    //   CANVAS_HEIGHT / 2 - 50
+    // );
+    // text(
+    //   "But beware the rocks, they will cost energy!",
+    //   CANVAS_WIDTH / 2,
+    //   CANVAS_HEIGHT / 2 - 30
+    // );
+    // text(
+    //   "So better avoid getting to tired in order to keep climbing!",
+    //   CANVAS_WIDTH / 2,
+    //   CANVAS_HEIGHT / 2 - 10
+    // );
+    // pop();
 
     // show keys:
-    image(arrowLeftImg, CANVAS_WIDTH / 8, CANVAS_HEIGHT / 2 + 30, 60, 50);
-    image(
-      arrowRightImg,
-      (CANVAS_WIDTH / 8) * 1.8,
-      CANVAS_HEIGHT / 2 + 30,
-      60,
-      50
-    );
+    // image(arrowLeftImg, CANVAS_WIDTH / 8, CANVAS_HEIGHT / 2 + 30, 60, 50);
+    // image(
+    //   arrowRightImg,
+    //   (CANVAS_WIDTH / 8) * 1.8,
+    //   CANVAS_HEIGHT / 2 + 30,
+    //   60,
+    //   50
+    // );
 
-    push();
-    textSize(24);
-    textAlign(CENTER, CENTER);
-    text("to move left/right", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 55);
-    pop();
+    // push();
+    // textSize(24);
+    // textAlign(CENTER, CENTER);
+    // text("to move left/right", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 55);
+    // pop();
 
     // text to tart the game:
-    push();
-    textSize(14);
-    textAlign(CENTER, BOTTOM);
-    text(
-      "Press Enter to start climbing top rope",
-      CANVAS_WIDTH / 2,
-      CANVAS_HEIGHT / 2 + 120
-    );
-    pop();
+    // push();
+    // textSize(14);
+    // textAlign(CENTER, BOTTOM);
+    // text(
+    //   "Press Enter to start climbing top rope",
+    //   CANVAS_WIDTH / 2,
+    //   CANVAS_HEIGHT / 2 + 120
+    // );
+    // pop();
   }
 
   screenLevel2() {
-    // create rect:
-    push();
-    fill(169, 169, 169);
-    rect(0, CANVAS_HEIGHT / 3, CANVAS_WIDTH, CANVAS_HEIGHT / 3);
-    pop();
+    // rect:
+    this.createRect(CANVAS_HEIGHT / 3);
 
-    // show name of level:
-    push();
-    textSize(30);
-    textAlign(CENTER, TOP);
-    text("Level 2 - Lead Climbing", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 115);
-    pop();
+    // header text:
+    this.createLevelHeader("Level 2 - Lead Climbing");
 
-    // show rules of level 1:
-    push();
-    textSize(18);
-    textAlign(CENTER, CENTER);
-    text(
+    // show rules of level 2:
+    this.createLevelRules(
       "Now that you've collected enough quickdraws,",
-      CANVAS_WIDTH / 2,
-      CANVAS_HEIGHT / 2 - 50
-    );
-
-    text(
-      " you can start testing your abilities in lead climbing!",
-      CANVAS_WIDTH / 2,
-      CANVAS_HEIGHT / 2 - 30
-    );
-
-    text(
+      "you can start testing your abilities in lead climbing!",
       "Place quickdraws in the bolts to increase safety.",
-      CANVAS_WIDTH / 2,
-      CANVAS_HEIGHT / 2 - 10
+      "Missing a bolt means reducing your safety!"
     );
 
-    text(
-      "Missing a bolt means reducing your safety!",
-      CANVAS_WIDTH / 2,
-      CANVAS_HEIGHT / 2 + 10
-    );
-    pop();
+    // important keys in level 2:
+    this.keysToUse(spaceImg, "", "to place quickdraw in bolt");
+
+    // text to continue:
+    this.reStartText("Press Enter to start lead climbing");
+    // show name of level:
+    // push();
+    // textSize(30);
+    // textAlign(CENTER, TOP);
+    // text("Level 2 - Lead Climbing", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 115);
+    // pop();
+
+    // show rules of level 2:
+    // push();
+    // textSize(18);
+    // textAlign(CENTER, CENTER);
+    // text(
+    //   "Now that you've collected enough quickdraws,",
+    //   CANVAS_WIDTH / 2,
+    //   CANVAS_HEIGHT / 2 - 50
+    // );
+
+    // text(
+    //   "you can start testing your abilities in lead climbing!",
+    //   CANVAS_WIDTH / 2,
+    //   CANVAS_HEIGHT / 2 - 30
+    // );
+
+    // text(
+    //   "Place quickdraws in the bolts to increase safety.",
+    //   CANVAS_WIDTH / 2,
+    //   CANVAS_HEIGHT / 2 - 10
+    // );
+
+    // text(
+    //   "Missing a bolt means reducing your safety!",
+    //   CANVAS_WIDTH / 2,
+    //   CANVAS_HEIGHT / 2 + 10
+    // );
+    // pop();
 
     // show key:
-    image(spaceImg, CANVAS_WIDTH / 12, CANVAS_HEIGHT / 2 + 30, 240, 50);
+    // image(spaceImg, CANVAS_WIDTH / 12, CANVAS_HEIGHT / 2 + 30, 240, 50);
 
-    push();
-    textSize(24);
-    textAlign(LEFT, CENTER);
-    text(
-      "to place quickdraw in bolt",
-      CANVAS_WIDTH / 2,
-      CANVAS_HEIGHT / 2 + 55
-    );
-    pop();
+    // push();
+    // textSize(24);
+    // textAlign(LEFT, CENTER);
+    // text(
+    //   "to place quickdraw in bolt",
+    //   CANVAS_WIDTH / 2,
+    //   CANVAS_HEIGHT / 2 + 55
+    // );
+    // pop();
 
     // text to tart the game:
-    push();
-    textSize(14);
-    textAlign(CENTER, BOTTOM);
-    text(
-      "Press Enter to start lead climbing",
-      CANVAS_WIDTH / 2,
-      CANVAS_HEIGHT / 2 + 120
-    );
-    pop();
+    // push();
+    // textSize(14);
+    // textAlign(CENTER, BOTTOM);
+    // text(
+    //   "Press Enter to start lead climbing",
+    //   CANVAS_WIDTH / 2,
+    //   CANVAS_HEIGHT / 2 + 120
+    // );
+    // pop();
   }
 
   gameOverScreen() {
-    push();
-    fill(169, 169, 169);
-    rect(0, CANVAS_HEIGHT / 3, CANVAS_WIDTH, CANVAS_HEIGHT / 3);
-    pop();
+    // rect:
+    this.createRect(CANVAS_HEIGHT / 3);
 
     // show Game Over message:
     push();
@@ -216,23 +294,21 @@ class Screen {
     pop();
 
     // text to restart the game:
-    push();
-    textSize(14);
-    textAlign(CENTER, BOTTOM);
-    text(
-      "Press Enter to restart the game",
-      CANVAS_WIDTH / 2,
-      CANVAS_HEIGHT / 2 + 100
-    );
-    pop();
+    this.reStartText("Press Enter to restart the game");
+    // push();
+    // textSize(14);
+    // textAlign(CENTER, BOTTOM);
+    // text(
+    //   "Press Enter to restart the game",
+    //   CANVAS_WIDTH / 2,
+    //   CANVAS_HEIGHT / 2 + 100
+    // );
+    // pop();
   }
 
   victoryScreen() {
-    // show victory screen:
-    push();
-    fill(169, 169, 169);
-    rect(0, (CANVAS_HEIGHT / 3) * 2, CANVAS_WIDTH, CANVAS_HEIGHT / 2 - 30);
-    pop();
+    // rect:
+    this.createRect((CANVAS_HEIGHT / 3) * 2);
 
     // show victory message:
     push();
