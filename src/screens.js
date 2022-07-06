@@ -305,7 +305,10 @@ class Screen {
     pop();
 
     // text to restart the game:
-    this.reStartText("Press Enter to restart the game");
+    this.reStartText(
+      "Press Enter to restart the game",
+      CANVAS_HEIGHT / 2 + 100
+    );
     // push();
     // textSize(14);
     // textAlign(CENTER, BOTTOM);

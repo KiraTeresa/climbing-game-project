@@ -17,6 +17,8 @@ class Game {
     this.granolaBar = [];
     this.bolts = [];
     this.quickDraw = [];
+    // this.boltsWithRope;
+    this.ropeInQuickDraw = false;
   }
 
   preload() {
@@ -70,9 +72,12 @@ class Game {
 
   play() {
     this.background.drawBackground();
+    this.rope();
     this.player.drawPlayer();
+
     // this.topo.drawTopo();
     this.displayStats();
+    this.showScreen();
 
     this.fallingObjects();
 
@@ -83,19 +88,6 @@ class Game {
 
     this.nextLevel();
     this.endGame();
-
-    // Display energy and safety level of climber as well as the game level:
-    // this.displayEnergyLevel();
-    // this.displaySafetyLevel();
-    // this.displayLevel();
-    // this.displayNumOfQuickdrawsOnHarness();
-
-    // Shows level instructions or starting-/gameover-/victory screen:
-    // this.screen.drawScreen();
-    this.showScreen();
-    // if (this.screenShown) {
-    //   console.log(this.screenShown);
-    // }
   }
 
   keyPressed() {
@@ -353,7 +345,40 @@ class Game {
       ) {
         this.placeQuickDraw(bolt);
       }
+
+      // Make the rope connect with between bottom, bolts with quickdraw and player:
+      this.connectRope(bolt);
     });
+  }
+
+  // !!!!!---> ROPE IN LEVEL 2 NEEDS FIXING <---!!!!!
+  connectRope(bolt) {
+    push();
+    strokeWeight(3);
+
+    if (bolt.hasQuickDraw) {
+      stroke("#1478B0");
+      line(
+        CANVAS_WIDTH / 2,
+        CANVAS_HEIGHT,
+        bolt.left + bolt.width / 2,
+        bolt.top + bolt.height * 3
+      );
+      line(
+        bolt.left + bolt.width / 2,
+        bolt.top + bolt.height,
+        this.player.left + this.player.width / 2,
+        this.player.top + this.player.height / 2
+      );
+    } else {
+      line(
+        CANVAS_WIDTH / 2,
+        CANVAS_HEIGHT,
+        this.player.left + this.player.width / 2,
+        this.player.top + this.player.height / 2
+      );
+    }
+    pop();
   }
 
   placeQuickDraw(bolt) {
@@ -366,6 +391,65 @@ class Game {
 
     // Safety goes up when quickdraw was placed in bolt:
     this.player.safety++;
+  }
+
+  rope() {
+    push();
+    strokeWeight(3);
+    stroke("#1478B0");
+    // level 1 is top rope --> rope comes from the top and is attached to player
+    if (this.currentLevel === 1) {
+      line(
+        CANVAS_WIDTH / 2,
+        0,
+        this.player.left + this.player.width / 2,
+        this.player.top + this.player.height / 2
+      );
+    }
+    // level 2 is lead --> rope comes from the bottom and is also attached to the player,
+    // but the rope also needs to go through the quickdraws, which the player has to
+    // place in the bolts:
+    // else if (this.currentLevel === 2) {
+    //   this.boltsWithRope = this.bolts.filter((bolt) => {
+    //     bolt.hasQuickDraw === true;
+    //   });
+    // if (this.boltsWithRope.length >= 1) {
+    //   for (let i = 0; i < this.boltsWithRope.length; i++) {
+    //     if (i === 0) {
+    //       line(
+    //         CANVAS_WIDTH / 2,
+    //         CANVAS_HEIGHT,
+    //         this.boltsWithRope[i].left + this.boltsWithRope[i].width / 2,
+    //         this.boltsWithRope[i].top + this.boltsWithRope[i].height
+    //       );
+    //     } else {
+    //       line(
+    //         this.boltsWithRope[i - 1].left +
+    //           this.boltsWithRope[i - 1].width / 2,
+    //         this.boltsWithRope[i - 1].top + this.boltsWithRope[i - 1].height,
+    //         this.boltsWithRope[i].left + this.boltsWithRope[i].width / 2,
+    //         this.boltsWithRope[i].top + this.boltsWithRope[i].height
+    //       );
+    //     }
+    //     if (i === this.boltsWithRope.length - 1) {
+    //       line(
+    //         this.boltsWithRope[i].left + this.boltsWithRope[i].width / 2,
+    //         this.boltsWithRope[i].top + this.boltsWithRope[i].height,
+    //         this.player.left + this.player.width / 2,
+    //         this.player.top + this.player.height / 2
+    //       );
+    //     }
+    //   }
+    // } else {
+    //   line(
+    //     CANVAS_WIDTH / 2,
+    //     CANVAS_HEIGHT,
+    //     this.player.left + this.player.width / 2,
+    //     this.player.top + this.player.height / 2
+    //   );
+    // }
+    // }
+    pop();
   }
 
   // displayEnergyLevel() {

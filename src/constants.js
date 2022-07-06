@@ -21,10 +21,10 @@ let spaceImg;
 // const DISPLAY_TEXT_X = DISPLAY_WIDTH / 2;
 
 // starting energy level of player:
-const ENERGY = 10;
+const ENERGY = 25;
 
 // number of quickdraws to be collected in level 1:
-const NUM_QUICKDRAWS = 4;
+const NUM_QUICKDRAWS = 3;
 
 // safety level to be reached in level 2:
 const SAFETY = 8;
