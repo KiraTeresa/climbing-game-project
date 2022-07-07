@@ -470,6 +470,7 @@ class Game {
     this.player.quickDrawsOnHarness = 0;
     this.player.granolaBarsEaten = 0;
     this.currentLevel = 1;
+    this.boltsWithRope = 0;
   }
 
   restartGame() {
