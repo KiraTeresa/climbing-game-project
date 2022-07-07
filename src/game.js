@@ -199,7 +199,11 @@ class Game {
   safetyEquipmentFalling() {
     // Create new safety equipment every three seconds:
     if (frameCount % 180 === 0) {
-      this.safetyEquipment.push(new SafetyEquipment(quickDrawImg));
+      if (this.currentLevel === 1 && this.quickDraw.length !== NUM_QUICKDRAWS) {
+        this.safetyEquipment.push(new SafetyEquipment(quickDrawImg));
+      } else if (this.currentLevel === 2) {
+        this.safetyEquipment.push(new SafetyEquipment(quickDrawImg));
+      }
     }
 
     // Draw safety equipment, remove from array when no longer within canvas OR collected by player:
