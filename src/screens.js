@@ -134,7 +134,7 @@ class Screen {
     this.createLevelRules(
       "You start climbing top rope, which means your safety is always high.",
       "But beware the rocks, they will cost energy!",
-      "So better avoid getting to tired in order to keep climbing!",
+      "So better avoid getting too tired in order to keep climbing!",
       "Wear a helmet and collect enough quickdraws to get to the top."
     );
 

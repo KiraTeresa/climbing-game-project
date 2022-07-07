@@ -17,8 +17,8 @@ class Game {
     this.granolaBar = [];
     this.bolts = [];
     this.quickDraw = [];
-    // this.boltsWithRope;
-    this.ropeInQuickDraw = false;
+    this.boltsWithRope = 0;
+    // this.ropeInQuickDraw = [];
   }
 
   preload() {
@@ -333,6 +333,8 @@ class Game {
         // decrease player safety when bolt is leaving the canvas without a quickdraw attached to it:
         if (bolt.hasQuickDraw === false && this.player.safety > 0) {
           this.player.safety--;
+        } else if (bolt.hasQuickDraw) {
+          this.boltsWithRope--;
         }
         this.removeFromArr(this.bolts, bolt);
       }
@@ -348,20 +350,23 @@ class Game {
         this.player.quickDrawsOnHarness
       ) {
         this.placeQuickDraw(bolt);
+        this.boltsWithRope++;
       }
 
-      // Make the rope connect with between bottom, bolts with quickdraw and player:
+      // Make the rope go through quickdraw inbetween bottom and player:
       this.connectRope(bolt);
     });
   }
 
-  // !!!!!---> ROPE IN LEVEL 2 NEEDS FIXING <---!!!!!
   connectRope(bolt) {
+    this.ropeInQuickDraw = this.bolts.filter((element) => {
+      element.hasQuickDraw === true;
+    });
+
     push();
     strokeWeight(3);
-
+    stroke("#1478B0");
     if (bolt.hasQuickDraw) {
-      stroke("#1478B0");
       line(
         CANVAS_WIDTH / 2,
         CANVAS_HEIGHT,
@@ -370,14 +375,7 @@ class Game {
       );
       line(
         bolt.left + bolt.width / 2,
-        bolt.top + bolt.height,
-        this.player.left + this.player.width / 2,
-        this.player.top + this.player.height / 2
-      );
-    } else {
-      line(
-        CANVAS_WIDTH / 2,
-        CANVAS_HEIGHT,
+        bolt.top + bolt.height * 3,
         this.player.left + this.player.width / 2,
         this.player.top + this.player.height / 2
       );
@@ -410,49 +408,15 @@ class Game {
         this.player.top + this.player.height / 2
       );
     }
-    // level 2 is lead --> rope comes from the bottom and is also attached to the player,
-    // but the rope also needs to go through the quickdraws, which the player has to
-    // place in the bolts:
-    // else if (this.currentLevel === 2) {
-    //   this.boltsWithRope = this.bolts.filter((bolt) => {
-    //     bolt.hasQuickDraw === true;
-    //   });
-    // if (this.boltsWithRope.length >= 1) {
-    //   for (let i = 0; i < this.boltsWithRope.length; i++) {
-    //     if (i === 0) {
-    //       line(
-    //         CANVAS_WIDTH / 2,
-    //         CANVAS_HEIGHT,
-    //         this.boltsWithRope[i].left + this.boltsWithRope[i].width / 2,
-    //         this.boltsWithRope[i].top + this.boltsWithRope[i].height
-    //       );
-    //     } else {
-    //       line(
-    //         this.boltsWithRope[i - 1].left +
-    //           this.boltsWithRope[i - 1].width / 2,
-    //         this.boltsWithRope[i - 1].top + this.boltsWithRope[i - 1].height,
-    //         this.boltsWithRope[i].left + this.boltsWithRope[i].width / 2,
-    //         this.boltsWithRope[i].top + this.boltsWithRope[i].height
-    //       );
-    //     }
-    //     if (i === this.boltsWithRope.length - 1) {
-    //       line(
-    //         this.boltsWithRope[i].left + this.boltsWithRope[i].width / 2,
-    //         this.boltsWithRope[i].top + this.boltsWithRope[i].height,
-    //         this.player.left + this.player.width / 2,
-    //         this.player.top + this.player.height / 2
-    //       );
-    //     }
-    //   }
-    // } else {
-    //   line(
-    //     CANVAS_WIDTH / 2,
-    //     CANVAS_HEIGHT,
-    //     this.player.left + this.player.width / 2,
-    //     this.player.top + this.player.height / 2
-    //   );
-    // }
-    // }
+    // level 2 is lead climbing --> rope comes from the bottom and is attached to player
+    else if (this.boltsWithRope === 0 && this.currentLevel === 2) {
+      line(
+        CANVAS_WIDTH / 2,
+        CANVAS_HEIGHT,
+        this.player.left + this.player.width / 2,
+        this.player.top + this.player.height / 2
+      );
+    }
     pop();
   }
 
