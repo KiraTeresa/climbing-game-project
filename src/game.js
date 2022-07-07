@@ -15,8 +15,6 @@ class Game {
     this.granolaBar = [];
     this.bolts = [];
     this.quickDraw = [];
-    // this.platforms = [];
-    // this.platformPositionLeft = true;
   }
 
   preload() {
@@ -28,7 +26,6 @@ class Game {
     quickDrawImg = loadImage(
       "./assets/graphics/quick-draw_415193651_adobe-stock.png"
     );
-    // platformImg = loadImage("./assets/Pad_3_3.png");
     helmetImg = loadImage("./assets/graphics/helmet_vectorstock_22265240.png");
     granolaBarImg = loadImage(
       "./assets/graphics/free-granola-bars-icons-vector.png"
@@ -38,6 +35,9 @@ class Game {
     );
     victoryImg = loadImage(
       "./assets/graphics/jody-confer-EIyu-OL-cFA-unsplash.jpg"
+    );
+    tiredImg = loadImage(
+      "./assets/graphics/david-clode-d8N22qmJEt4-unsplash.jpg"
     );
     arrowLeftImg = loadImage(
       "./assets/graphics/vecteezy_keyboard-keys-with-flat-design-style_arrow-left.png"
@@ -51,6 +51,7 @@ class Game {
     spaceImg = loadImage(
       "./assets/graphics/vecteezy_keyboard-keys-with-flat-design-style_space.png"
     );
+    // platformImg = loadImage("./assets/Pad_3_3.png");
 
     // Sounds:
     soundFormats("mp3", "ogg", "wav");
@@ -91,6 +92,7 @@ class Game {
     if (keyCode === ENTER && this.screenShown) {
       if (
         this.screenShown === "Start" ||
+        this.screenShown === "Tired" ||
         this.screenShown === "GameOver" ||
         this.screenShown === "Victory"
       ) {
@@ -281,40 +283,6 @@ class Game {
     });
   }
 
-  // platformAppearing() {
-  //   // Create new platform every 6 seconds
-  //   if (frameCount % 300 === 0) {
-  //     this.platforms.push(
-  //       new Platform(platformImg, helmetImg, this.platformPositionLeft)
-  //     );
-  //     this.platformPositionLeft = !this.platformPositionLeft;
-  //     platformCount++;
-  //     console.log("PlatformCount: ", platformCount);
-  //   }
-
-  //   this.platforms.forEach((platform) => {
-  //     // draw every element of the platform array
-  //     platform.drawPlatform();
-
-  //     // remove all platform elements which have left the canvas
-  //     if (platform.top > CANVAS_HEIGHT) {
-  //       this.removeFromArr(this.platforms, platform);
-  //     }
-
-  //     // Collision check with platform:
-  //     if (
-  //       this.isColliding(this.player, platform) &&
-  //       !platform.hitClimber &&
-  //       !platform.platformHasHelmet
-  //     ) {
-  //       this.player.energy -= 10;
-  //       platform.hitClimber = true;
-  //       this.player.boomChakalaka();
-  //     }
-  //     //
-  //   });
-  // }
-
   boltsShowing() {
     if (frameCount % 180 === 0) {
       this.bolts.push(new Bolt(quickDrawImg));
@@ -345,6 +313,7 @@ class Game {
         keyCode === SPACE &&
         this.player.quickDrawsOnHarness
       ) {
+        safetyEquipmentSound.play();
         this.placeQuickDraw(bolt);
         this.boltsWithRope++;
       }
@@ -352,31 +321,6 @@ class Game {
       // Make the rope go through quickdraw inbetween bottom and player:
       this.connectRope(bolt);
     });
-  }
-
-  connectRope(bolt) {
-    this.ropeInQuickDraw = this.bolts.filter((element) => {
-      element.hasQuickDraw === true;
-    });
-
-    push();
-    strokeWeight(3);
-    stroke("#1478B0");
-    if (bolt.hasQuickDraw) {
-      line(
-        CANVAS_WIDTH / 2,
-        CANVAS_HEIGHT,
-        bolt.left + bolt.width / 2,
-        bolt.top + bolt.height * 3
-      );
-      line(
-        bolt.left + bolt.width / 2,
-        bolt.top + bolt.height * 3,
-        this.player.left + this.player.width / 2,
-        this.player.top + this.player.height / 2
-      );
-    }
-    pop();
   }
 
   placeQuickDraw(bolt) {
@@ -416,6 +360,31 @@ class Game {
     pop();
   }
 
+  connectRope(bolt) {
+    this.ropeInQuickDraw = this.bolts.filter((element) => {
+      element.hasQuickDraw === true;
+    });
+
+    push();
+    strokeWeight(3);
+    stroke("#1478B0");
+    if (bolt.hasQuickDraw) {
+      line(
+        CANVAS_WIDTH / 2,
+        CANVAS_HEIGHT,
+        bolt.left + bolt.width / 2,
+        bolt.top + bolt.height * 4
+      );
+      line(
+        bolt.left + bolt.width / 2,
+        bolt.top + bolt.height * 4,
+        this.player.left + this.player.width / 2,
+        this.player.top + this.player.height / 2
+      );
+    }
+    pop();
+  }
+
   nextLevel() {
     if (
       this.currentLevel === 1 &&
@@ -428,12 +397,28 @@ class Game {
   }
 
   displayStats() {
-    this.displays = new Stats(
-      this.player.energy,
-      this.player.safety,
-      this.player.quickDrawsOnHarness,
-      this.currentLevel
-    );
+    if (this.currentLevel === 1) {
+      this.displays = new Stats(
+        this.player.energy,
+        "Super Save",
+        this.player.quickDrawsOnHarness,
+        this.currentLevel
+      );
+    } else if (this.currentLevel === 2) {
+      this.displays = new Stats(
+        this.player.energy,
+        this.player.safety,
+        this.player.quickDrawsOnHarness,
+        this.currentLevel
+      );
+    } else {
+      this.displays = new Stats(
+        this.player.energy,
+        this.player.safety,
+        this.player.quickDrawsOnHarness,
+        this.currentLevel
+      );
+    }
     this.displays.drawStats();
   }
 
@@ -441,9 +426,9 @@ class Game {
     arr.splice(arr.indexOf(obstacle), 1);
   }
 
-  gameOver() {
+  gameOver(screen) {
     this.background.moving = false;
-    this.screenShown = "GameOver";
+    this.screenShown = screen;
 
     // play game over sound:
     if (!gameOverSound.isPlaying() && !this.soundPlayed) {
@@ -466,12 +451,12 @@ class Game {
   endGame() {
     if (this.background.moving) {
       if (this.player.energy <= 0) {
-        this.gameOver();
+        this.gameOver("Tired");
       } else if (this.currentLevel === 2) {
         if (this.player.safety >= SAFETY) {
           this.victory();
         } else if (this.player.safety === 0) {
-          this.gameOver();
+          this.gameOver("GameOver");
         }
       }
     }

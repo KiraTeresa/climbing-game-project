@@ -14,13 +14,13 @@ let enterImg;
 let spaceImg;
 
 // starting energy level of player:
-const ENERGY = 25;
+const ENERGY = 30;
 
 // number of quickdraws to be collected in level 1:
-const NUM_QUICKDRAWS = 3;
+const NUM_QUICKDRAWS = 8;
 
 // safety level to be reached in level 2:
-const SAFETY = 8;
+const SAFETY = 18;
 
 // general values for moving obstacles and background:
 const GRAVITY = 0.1;
@@ -34,6 +34,7 @@ let helmetImg;
 let granolaBarImg;
 let startImg;
 let victoryImg;
+let tiredImg;
 
 // sounds:
 let rockSound;
@@ -41,5 +42,3 @@ let safetyEquipmentSound;
 let eatingSound;
 let victorySound;
 let gameOverSound;
-
-// let platformCount = 0;

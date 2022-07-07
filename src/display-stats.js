@@ -42,17 +42,21 @@ class Stats {
     this.createRect(left, "#C30E0E", this.width); // red rect
     this.createRect(left, "SeaGreen", (this.width / ENERGY) * this.energy); // green rect
     // text:
-    if (this.energy > 0) {
-      this.createText("Energy", this.energy, this.width * 0.5);
-    } else {
-      this.createText("Too tired", "", this.width * 0.5);
-    }
+    // if (this.energy > 0) {
+    this.createText("Energy", this.energy, this.width * 0.5);
+    // } else {
+    //   this.createText("Too tired", "", this.width * 0.5);
+    // }
   }
 
   safetyDisplay() {
     // rect:
     const left = this.width;
-    this.createRect(left, "", this.width);
+    if (this.currentLevel === 1) {
+      this.createRect(left, "SeaGreen", this.width);
+    } else {
+      this.createRect(left, "", this.width);
+    }
     // text:
     if (this.currentLevel === 2) {
       this.createText("Safety", `${this.safety}/${SAFETY}`, this.width * 1.5);

@@ -14,6 +14,9 @@ class Screen {
       case "Level2":
         this.screenLevel2();
         break;
+      case "Tired":
+        this.tiredScreen();
+        break;
       case "GameOver":
         this.gameOverScreen();
         break;
@@ -57,10 +60,7 @@ class Screen {
     this.keysToUse(arrowLeftImg, arrowRightImg, "to move left/right");
 
     // text to start level 1:
-    this.reStartText(
-      "Press Enter to start climbing top rope",
-      CANVAS_HEIGHT - 20
-    );
+    this.reStartText("Press Enter to start climbing", CANVAS_HEIGHT - 20);
   }
 
   screenLevel2() {
@@ -85,6 +85,33 @@ class Screen {
     this.reStartText("Press Enter to start lead climbing", CANVAS_HEIGHT - 20);
   }
 
+  tiredScreen() {
+    // rect:
+    // this.createRect(CANVAS_HEIGHT / 3);
+    image(tiredImg, 0, -50, CANVAS_WIDTH, CANVAS_HEIGHT + 50);
+
+    // show "too tired" message:
+    push();
+    textSize(60);
+    fill("#006400");
+    textAlign(CENTER, CENTER);
+    text("Too Tired!", CANVAS_WIDTH / 2, CANVAS_HEIGHT - 80);
+    pop();
+
+    push();
+    textSize(20);
+    textAlign(CENTER, CENTER);
+    text(
+      "No more energy to climb, better take a rest!",
+      CANVAS_WIDTH / 2,
+      CANVAS_HEIGHT - 40
+    );
+    pop();
+
+    // text to restart the game:
+    this.reStartText("Press Enter to restart the game", CANVAS_HEIGHT - 10);
+  }
+
   gameOverScreen() {
     // rect:
     this.createRect(CANVAS_HEIGHT / 3);
@@ -100,7 +127,7 @@ class Screen {
     textSize(20);
     textAlign(CENTER, CENTER);
     text(
-      "No more energy to climb, better take a rest!",
+      "We're not doing free solo here! Follow the safety procedure!",
       CANVAS_WIDTH / 2,
       CANVAS_HEIGHT / 2 + 30
     );
@@ -108,7 +135,7 @@ class Screen {
 
     // text to restart the game:
     this.reStartText(
-      "Press Enter to restart the game",
+      "Press Enter to start all over with the basics",
       CANVAS_HEIGHT / 2 + 100
     );
   }
@@ -205,7 +232,7 @@ class Screen {
     push();
     textSize(14);
     textAlign(CENTER, BOTTOM);
-    text(someText, CANVAS_WIDTH / 2, yAxis);
+    text(`-- ${someText} --`, CANVAS_WIDTH / 2, yAxis);
     pop();
   }
 }
