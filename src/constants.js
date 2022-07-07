@@ -13,13 +13,6 @@ let arrowRightImg;
 let enterImg;
 let spaceImg;
 
-// general values for positioning of the stats:
-// const DISPLAY_TOP = 0;
-// const DISPLAY_WIDTH = CANVAS_WIDTH / 4;
-// const DISPLAY_HEIGHT = 30;
-// const DISPLAY_TEXT_Y = DISPLAY_HEIGHT / 2;
-// const DISPLAY_TEXT_X = DISPLAY_WIDTH / 2;
-
 // starting energy level of player:
 const ENERGY = 25;
 
@@ -48,8 +41,5 @@ let safetyEquipmentSound;
 let eatingSound;
 let victorySound;
 let gameOverSound;
-
-// variable which stores current level:
-// let currentLevel = 0;
 
 // let platformCount = 0;

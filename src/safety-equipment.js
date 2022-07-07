@@ -10,7 +10,6 @@ class SafetyEquipment {
   }
 
   drawSafetyEquipment() {
-    // rect(this.left, this.top, this.width, this.height);
     image(this.img, this.left, this.top, this.width, this.height);
     this.top += this.speed;
     this.speed += this.gravity;

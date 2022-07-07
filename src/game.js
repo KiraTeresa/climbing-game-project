@@ -6,25 +6,22 @@ class Game {
     this.screenShown = "Start";
     this.displays;
     this.currentLevel = 0;
-    // this.topo = new Topo(); // disabled because it slows down the game to much
+    this.boltsWithRope = 0;
 
     // randomized objects:
     this.rocks = [];
     this.safetyEquipment = [];
-    // this.platforms = [];
-    // this.platformPositionLeft = true;
     this.helmet = [];
     this.granolaBar = [];
     this.bolts = [];
     this.quickDraw = [];
-    this.boltsWithRope = 0;
-    // this.ropeInQuickDraw = [];
+    // this.platforms = [];
+    // this.platformPositionLeft = true;
   }
 
   preload() {
     this.background.preload();
     this.player.preload();
-    // this.topo.preload();
 
     // Images:
     rockImg = loadImage("./assets/graphics/a44g_3gj6_201006.png");
@@ -75,7 +72,6 @@ class Game {
     this.rope();
     this.player.drawPlayer();
 
-    // this.topo.drawTopo();
     this.displayStats();
     this.showScreen();
 
@@ -420,53 +416,6 @@ class Game {
     pop();
   }
 
-  // displayEnergyLevel() {
-  //   // // create red rect:
-  //   // push();
-  //   // fill("#C30E0E");
-  //   // rect(0, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-  //   // pop();
-
-  //   // // create green rect:
-  //   // push();
-  //   // fill("SeaGreen");
-  //   // rect(
-  //   //   0,
-  //   //   DISPLAY_TOP,
-  //   //   (DISPLAY_WIDTH / ENERGY) * this.player.energy,
-  //   //   DISPLAY_HEIGHT
-  //   // ); // rect(x, y, w, h, top-left radius, tr radius, br radius, bl radius)
-  //   // pop();
-
-  //   // set text with current energy level:
-  //   if (this.player.energy > 0) {
-  //     // textSize(16);
-  //     // textAlign(CENTER, CENTER);
-  //     // text(`Energy: ${this.player.energy}`, DISPLAY_TEXT_X, DISPLAY_TEXT_Y);
-  //   }
-
-  //   // show game over screen when no more energy left:
-  //   else {
-  //     // push();
-  //     // textSize(15);
-  //     // textAlign(CENTER, CENTER);
-  //     // text(`Too tired`, DISPLAY_TEXT_X, DISPLAY_TEXT_Y);
-  //     // pop();
-  //     this.gameOver();
-  //   }
-  // }
-
-  // displaySafetyLevel() {
-  //   // // create rect:
-  //   // rect(DISPLAY_WIDTH, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-
-  //   // // set text with current safety level:
-  //   // textSize(16);
-  //   // textAlign(CENTER, CENTER);
-  //   // text(`Safety: ${this.player.safety}`, DISPLAY_WIDTH * 1.5, DISPLAY_TEXT_Y);
-
-  // }
-
   nextLevel() {
     if (
       this.currentLevel === 1 &&
@@ -477,70 +426,6 @@ class Game {
       this.screenShown = "Level2";
     }
   }
-
-  // displayNumOfQuickdrawsOnHarness() {
-  //   // create rect:
-  //   if (
-  //     currentLevel === 1 &&
-  //     this.player.quickDrawsOnHarness >= NUM_QUICKDRAWS
-  //   ) {
-  //     push();
-  //     fill("SeaGreen");
-  //     rect(DISPLAY_WIDTH * 2, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-  //     pop();
-  //   } else if (currentLevel === 2) {
-  //     if (this.player.quickDrawsOnHarness > 0) {
-  //       push();
-  //       fill("SeaGreen");
-  //       rect(DISPLAY_WIDTH * 2, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-  //       pop();
-  //     } else {
-  //       push();
-  //       fill("#C30E0E");
-  //       rect(DISPLAY_WIDTH * 2, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-  //       pop();
-  //     }
-  //   } else {
-  //     rect(DISPLAY_WIDTH * 2, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-  //   }
-
-  //   // set text with number of quickdraws on harness:
-  //   textSize(16);
-  //   textAlign(CENTER, CENTER);
-  //   text(
-  //     `Quickdraws: ${this.player.quickDrawsOnHarness}`,
-  //     DISPLAY_WIDTH * 2.5,
-  //     DISPLAY_TEXT_Y
-  //   );
-  // }
-
-  // displayLevel() {
-  //   // create rect:
-  //   rect(DISPLAY_WIDTH * 3, DISPLAY_TOP, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-
-  //   // set text with current level:
-  //   // if (currentLevel === 1) {
-  //   //   push();
-  //   //   textSize(16);
-  //   //   textStyle(BOLD);
-  //   //   fill(0, 102, 153);
-  //   //   text(`Level: ${currentLevel}`, DISPLAY_WIDTH * 3.5, DISPLAY_TEXT_Y);
-  //   //   pop();
-  //   // } else if (currentLevel === 2) {
-  //   //   push();
-  //   //   textSize(16);
-  //   //   textStyle(BOLD);
-  //   //   fill(205, 92, 92);
-  //   //   text(`Level: ${currentLevel}`, DISPLAY_WIDTH * 3.5, DISPLAY_TEXT_Y);
-  //   //   pop();
-  //   // } else {
-  //   push();
-  //   textSize(16);
-  //   textStyle(BOLD);
-  //   text(`Level: ${currentLevel}`, DISPLAY_WIDTH * 3.5, DISPLAY_TEXT_Y);
-  //   pop();
-  //   // }
-  // }
 
   displayStats() {
     this.displays = new Stats(
@@ -606,14 +491,6 @@ class Game {
     this.background.moving = true;
     this.soundPlayed = false;
 
-    // // resetting stats:
-    // this.player.energy = ENERGY;
-    // this.player.safety = 0;
-    // this.player.wearingHelmet = false;
-    // this.player.quickDrawsOnHarness = 0;
-    // this.player.granolaBarsEaten = 0;
-    // this.currentLevel = 1;
-
     // clearing obstacle arrays:
     this.rocks = [];
     this.safetyEquipment = [];
@@ -626,265 +503,8 @@ class Game {
     this.screenShown = "";
   }
 
-  // gameOverScreen() {
-  //   push();
-  //   fill(169, 169, 169);
-  //   rect(0, CANVAS_HEIGHT / 3, CANVAS_WIDTH, CANVAS_HEIGHT / 3);
-  //   pop();
-
-  //   // show Game Over message:
-  //   push();
-  //   textSize(60);
-  //   textAlign(CENTER, CENTER);
-  //   text("GAME OVER", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 30);
-  //   pop();
-
-  //   push();
-  //   textSize(20);
-  //   textAlign(CENTER, CENTER);
-  //   text(
-  //     "No more energy to climb, better take a rest!",
-  //     CANVAS_WIDTH / 2,
-  //     CANVAS_HEIGHT / 2 + 30
-  //   );
-  //   pop();
-
-  //   // text to restart the game:
-  //   push();
-  //   textSize(14);
-  //   textAlign(CENTER, BOTTOM);
-  //   text(
-  //     "Press Enter to restart the game",
-  //     CANVAS_WIDTH / 2,
-  //     CANVAS_HEIGHT / 2 + 100
-  //   );
-  //   pop();
-  // }
-
-  // victoryScreen() {
-  //   // show victory screen:
-  //   push();
-  //   fill(169, 169, 169);
-  //   rect(0, (CANVAS_HEIGHT / 3) * 2, CANVAS_WIDTH, CANVAS_HEIGHT / 2 - 30);
-  //   pop();
-
-  //   // show victory message:
-  //   push();
-  //   textSize(60);
-  //   textAlign(CENTER, CENTER);
-  //   text("Great Job!", CANVAS_WIDTH / 2, (CANVAS_HEIGHT / 3) * 2.5 - 30);
-  //   pop();
-
-  //   push();
-  //   textSize(20);
-  //   textAlign(CENTER, CENTER);
-  //   text(
-  //     "Did it even challenge you in any way?",
-  //     CANVAS_WIDTH / 2,
-  //     (CANVAS_HEIGHT / 3) * 2.5 + 30
-  //   );
-  //   pop();
-
-  //   // text to continue climbing:
-  //   push();
-  //   textSize(14);
-  //   textAlign(CENTER, BOTTOM);
-  //   text(
-  //     "Press Enter to climb the next mountain",
-  //     CANVAS_WIDTH / 2,
-  //     (CANVAS_HEIGHT / 3) * 2.5 + 100
-  //   );
-  //   pop();
-  // }
-
-  // startingScreen() {
-  //   push();
-  //   fill(169, 169, 169);
-  //   rect(0, CANVAS_HEIGHT / 3, CANVAS_WIDTH, CANVAS_HEIGHT / 3);
-  //   pop();
-
-  //   // show welcome message:
-  //   push();
-  //   textSize(60);
-  //   textAlign(CENTER, CENTER);
-  //   text("Ready to climb?", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 30);
-  //   pop();
-
-  //   push();
-  //   textSize(20);
-  //   textAlign(CENTER, CENTER);
-  //   text(
-  //     "Look at the Topo for the rules of the game",
-  //     CANVAS_WIDTH / 2,
-  //     CANVAS_HEIGHT / 2 + 30
-  //   );
-  //   pop();
-
-  //   // text to start the game:
-  //   push();
-  //   textSize(14);
-  //   textAlign(CENTER, BOTTOM);
-  //   text(
-  //     "Press Enter to start the game",
-  //     CANVAS_WIDTH / 2,
-  //     CANVAS_HEIGHT / 2 + 100
-  //   );
-  //   pop();
-  // }
-
-  // screenLevel1() {
-  //   // create rect:
-  //   push();
-  //   fill(169, 169, 169);
-  //   rect(0, CANVAS_HEIGHT / 3, CANVAS_WIDTH, CANVAS_HEIGHT / 3);
-  //   pop();
-
-  //   // show name of level:
-  //   push();
-  //   textSize(30);
-  //   textAlign(CENTER, TOP);
-  //   text("Level 1 - Top Rope", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 115);
-  //   pop();
-
-  //   // show rules of level 1:
-  //   push();
-  //   textSize(18);
-  //   textAlign(CENTER, CENTER);
-  //   text(
-  //     "You start climbing top rope, which means your safety is always high.",
-  //     CANVAS_WIDTH / 2,
-  //     CANVAS_HEIGHT / 2 - 50
-  //   );
-  //   text(
-  //     "But beware the rocks, they will cost energy!",
-  //     CANVAS_WIDTH / 2,
-  //     CANVAS_HEIGHT / 2 - 30
-  //   );
-  //   text(
-  //     "So better avoid getting to tired in order to keep climbing!",
-  //     CANVAS_WIDTH / 2,
-  //     CANVAS_HEIGHT / 2 - 10
-  //   );
-  //   pop();
-
-  //   // show keys:
-  //   image(arrowLeftImg, CANVAS_WIDTH / 8, CANVAS_HEIGHT / 2 + 30, 60, 50);
-  //   image(
-  //     arrowRightImg,
-  //     (CANVAS_WIDTH / 8) * 1.8,
-  //     CANVAS_HEIGHT / 2 + 30,
-  //     60,
-  //     50
-  //   );
-
-  //   push();
-  //   textSize(24);
-  //   textAlign(CENTER, CENTER);
-  //   text("to move left/right", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 55);
-  //   pop();
-
-  //   // text to tart the game:
-  //   push();
-  //   textSize(14);
-  //   textAlign(CENTER, BOTTOM);
-  //   text(
-  //     "Press Enter to start climbing top rope",
-  //     CANVAS_WIDTH / 2,
-  //     CANVAS_HEIGHT / 2 + 120
-  //   );
-  //   pop();
-  // }
-
-  // screenLevel2() {
-  //   // create rect:
-  //   push();
-  //   fill(169, 169, 169);
-  //   rect(0, CANVAS_HEIGHT / 3, CANVAS_WIDTH, CANVAS_HEIGHT / 3);
-  //   pop();
-
-  //   // show name of level:
-  //   push();
-  //   textSize(30);
-  //   textAlign(CENTER, TOP);
-  //   text("Level 2 - Lead Climbing", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 115);
-  //   pop();
-
-  //   // show rules of level 1:
-  //   push();
-  //   textSize(18);
-  //   textAlign(CENTER, CENTER);
-  //   text(
-  //     "Now that you've collected enough quickdraws,",
-  //     CANVAS_WIDTH / 2,
-  //     CANVAS_HEIGHT / 2 - 50
-  //   );
-
-  //   text(
-  //     " you can start testing your abilities in lead climbing!",
-  //     CANVAS_WIDTH / 2,
-  //     CANVAS_HEIGHT / 2 - 30
-  //   );
-
-  //   text(
-  //     "Place quickdraws in the bolts to increase safety.",
-  //     CANVAS_WIDTH / 2,
-  //     CANVAS_HEIGHT / 2 - 10
-  //   );
-
-  //   text(
-  //     "Missing a bolt means reducing your safety!",
-  //     CANVAS_WIDTH / 2,
-  //     CANVAS_HEIGHT / 2 + 10
-  //   );
-  //   pop();
-
-  //   // show key:
-  //   image(spaceImg, CANVAS_WIDTH / 12, CANVAS_HEIGHT / 2 + 30, 240, 50);
-
-  //   push();
-  //   textSize(24);
-  //   textAlign(LEFT, CENTER);
-  //   text(
-  //     "to place quickdraw in bolt",
-  //     CANVAS_WIDTH / 2,
-  //     CANVAS_HEIGHT / 2 + 55
-  //   );
-  //   pop();
-
-  //   // text to tart the game:
-  //   push();
-  //   textSize(14);
-  //   textAlign(CENTER, BOTTOM);
-  //   text(
-  //     "Press Enter to start lead climbing",
-  //     CANVAS_WIDTH / 2,
-  //     CANVAS_HEIGHT / 2 + 120
-  //   );
-  //   pop();
-  // }
-
   showScreen() {
     this.screen = new Screen(this.screenShown);
     this.screen.drawScreen();
-    // switch (this.screenShown) {
-    //   case "Start":
-    //     this.screen.startingScreen();
-    //     break;
-    //   case "Level1":
-    //     this.screen.screenLevel1();
-    //     break;
-    //   case "Level2":
-    //     this.screen.screenLevel2();
-    //     break;
-    //   case "GameOver":
-    //     this.screen.gameOverScreen();
-    //     break;
-    //   case "Victory":
-    //     this.screen.victoryScreen();
-    //     break;
-    //   // default:
-    //   //   this.startingScreen();
-    //   //   break;
-    // }
   }
 }
