@@ -14,13 +14,13 @@ let enterImg;
 let spaceImg;
 
 // starting energy level of player:
-const ENERGY = 30;
+const ENERGY = 50;
 
 // number of quickdraws to be collected in level 1:
-const NUM_QUICKDRAWS = 8;
+const NUM_QUICKDRAWS = 4;
 
 // safety level to be reached in level 2:
-const SAFETY = 18;
+const SAFETY = 10;
 
 // general values for moving obstacles and background:
 const GRAVITY = 0.1;
